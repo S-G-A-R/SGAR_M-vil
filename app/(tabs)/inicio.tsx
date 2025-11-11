@@ -1,14 +1,16 @@
+import HeaderMenu from "@/components/HeaderMenu";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { Image } from "expo-image";
 import { useRouter } from "expo-router";
 import { useState } from "react";
 
-import { Pressable, StyleSheet, View } from "react-native";
+import { Modal, Pressable, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 export default function InicioScreen() {
   const router = useRouter();
   const [menuVisible, setMenuVisible] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
 
   const handleLoginOption = (rol: string) => {
     setMenuVisible(false);
@@ -18,11 +20,11 @@ export default function InicioScreen() {
   return (
     <ThemedView style={styles.container}>
       <ThemedView style={styles.header}>
-        <Pressable>
-          <ThemedText style={styles.icon}>☰</ThemedText>
-        </Pressable>
 
-        <ThemedText style={styles.headerTitle}>S.G.A.R</ThemedText>
+        <Image
+          source={require('@/assets/images/sgar.jpg')}
+          style={styles.logo}
+        />
 
         <View style={styles.dropdownContainer}>
           <Pressable onPress={() => setMenuVisible(!menuVisible)}>
@@ -56,20 +58,38 @@ export default function InicioScreen() {
           contentFit="cover"
         />
 
-        <Pressable style={styles.buttonWrapper}>
-          <ThemedView style={styles.button}>
-            <ThemedText style={styles.buttonText}>Bienvenidos</ThemedText>
-          </ThemedView>
-        </Pressable>
+        <Text style={styles.welcomeText}>¡Bienvenido a S.G.A.R!</Text>
 
-        <Pressable style={styles.buttonWrapper}>
-          <ThemedView style={styles.button}>
-            <ThemedText style={styles.buttonText}>
-              Acerca de nosotros
-            </ThemedText>
-          </ThemedView>
-        </Pressable>
+        <TouchableOpacity
+          style={styles.aboutButton}
+          onPress={() => setModalVisible(true)}
+        >
+          <Text style={styles.aboutText}>Acerca de nosotros</Text>
+        </TouchableOpacity>
       </ThemedView>
+
+      {/* Modal "Acerca de nosotros" */}
+      <Modal
+        transparent={true}
+        animationType="fade"
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <Pressable
+          style={styles.overlay}
+          onPress={() => setModalVisible(false)}
+        >
+          <View style={styles.modalBox}>
+            <Text style={styles.modalTitle}>🌱 Sobre SGAR</Text>
+            <Text style={styles.modalContent}>
+              Sistema de Gestión de Aseo y Residuos. Sistema creado para
+              optimizar los procesos de recolección de basura, limpieza y
+              gestión de desechos en municipios y empresas de aseo.
+            </Text>
+          </View>
+        </Pressable>
+      </Modal>
+
     </ThemedView>
   );
 }
@@ -90,6 +110,12 @@ const styles = StyleSheet.create({
     borderBottomColor: "#eee",
     backgroundColor: "#fff",
   },
+  logo: {
+    width: 100,
+    height: 100,
+    resizeMode: 'contain',
+    marginBottom: 20,
+  },
   icon: {
     fontSize: 24,
     color: "#000",
@@ -104,7 +130,7 @@ const styles = StyleSheet.create({
   },
 
   dropdownTrigger: {
-    color: "#007bff",
+    color: "#000",
     fontSize: 16,
   },
   dropdownMenu: {
@@ -156,5 +182,48 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "500",
     color: "#000",
+  },
+  overlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.4)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalBox: {
+    width: 300,
+    backgroundColor: '#fff',
+    borderRadius: 15,
+    padding: 20,
+    alignItems: 'center',
+    elevation: 10,
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: '700',
+    marginBottom: 10,
+    color: '#2e5d52',
+  },
+  modalContent: {
+    fontSize: 15,
+    textAlign: 'center',
+    color: '#444',
+  },
+  aboutButton: {
+    backgroundColor: '#fff',
+    paddingHorizontal: 30,
+    paddingVertical: 12,
+    borderRadius: 20,
+    elevation: 3,
+  },
+  aboutText: {
+    fontSize: 16,
+    fontWeight: '500',
+    color: '#67978d',
+  },
+  welcomeText: {
+    fontSize: 24,
+    fontWeight: '700',
+    color: '#333',
+    marginBottom: 25,
   },
 });

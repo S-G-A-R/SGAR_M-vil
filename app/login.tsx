@@ -20,13 +20,27 @@ export default function LoginScreen() {
   const [contrasena, setContrasena] = useState("");
 
   const handleLogin = () => {
-    
-    if (!usuario || !contrasena) {
-      alert("Por favor, completa todos los campos.");
-      return;
+  if (!usuario || !contrasena) {
+    alert("Por favor, completa todos los campos.");
+    return;
+  }
+
+  alert(`Inicio de sesión como ${rol || "usuario"} correcto ✅`);
+
+  // Pequeño retraso para que la alerta se vea antes del redireccionamiento
+  setTimeout(() => {
+    if (rol === "ciudadano") {
+      router.push("/inicio/menuCiudadano");
+    } else if (rol === "operador") {
+      router.push("/inicio/menuCiudadano"); //cambiar ruta para operador
+    } else if (rol === "asociado") {
+      router.push("/inicio/menuCiudadano"); //cambiar ruta para asociado
+    } else if (rol === "organización") {
+      router.push("/inicio/menuCiudadano"); //cambiar ruta para organización
     }
-    alert(`Inicio de sesión como ${rol || "usuario"} correcto ✅`);
-  };
+  }, 500);
+};
+
 
   const tituloRol =
     rol === "ciudadano"

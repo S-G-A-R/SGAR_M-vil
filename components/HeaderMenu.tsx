@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Animated, StyleSheet, Image, TouchableWithoutFeedback, Dimensions } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import React, { useState } from 'react';
+import { Animated, Dimensions, Image, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 
 const { height, width } = Dimensions.get('window');
 
@@ -28,7 +28,7 @@ export default function HeaderMenu() {
                     </TouchableOpacity>
 
                     <Image
-                        source={require('../assets/images/sgar.jpg')}
+                        source={require('@/assets/images/sgar.jpg')}
                         style={styles.logo}
                     />
                 </View>
@@ -36,7 +36,7 @@ export default function HeaderMenu() {
                 {/* 🔹 Botón de inicio de sesión a la derecha */}
                 <TouchableOpacity style={styles.loginButton}>
                     <Ionicons name="person-circle-outline" size={28} color="#000" />
-                    <Text style={styles.loginText}>Iniciar sesión</Text>
+                    <Text style={styles.loginText}>Usuario</Text>
                 </TouchableOpacity>
             </View>
 
