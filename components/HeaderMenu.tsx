@@ -10,12 +10,14 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
+import { useRouter, Href } from "expo-router";
 
 const { height, width } = Dimensions.get("window");
 
 export default function HeaderMenu() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const slideAnim = useState(new Animated.Value(-200))[0];
+  const router = useRouter(); 
 
   const toggleMenu = () => {
     const toValue = isMenuOpen ? -200 : 0;
@@ -27,10 +29,20 @@ export default function HeaderMenu() {
     setIsMenuOpen(!isMenuOpen);
   };
 
+    const handleNavigate = (path: Href) => { 
+      toggleMenu();
+      router.push(path); 
+    };
+
+  const handleLogout = () => {
+    toggleMenu(); 
+    // Aquí ira el token de sesión
+    router.replace("/menu/menuCiudadano"); 
+  };
+
   return (
     <View style={{ zIndex: 100 }}>
       <View style={styles.topBar}>
-
         <View style={styles.leftSection}>
           <TouchableOpacity style={styles.menuButton} onPress={toggleMenu}>
             <Ionicons name="menu" size={28} color="#000" />
@@ -42,34 +54,42 @@ export default function HeaderMenu() {
           />
         </View>
 
-        
         <TouchableOpacity style={styles.loginButton}>
           <Ionicons name="person-circle-outline" size={28} color="#000" />
           <Text style={styles.loginText}>Usuario</Text>
         </TouchableOpacity>
       </View>
 
-      
       {isMenuOpen && (
         <TouchableWithoutFeedback onPress={toggleMenu}>
           <View style={styles.overlay} />
         </TouchableWithoutFeedback>
       )}
 
+      
       <Animated.View
         style={[styles.sideMenu, { transform: [{ translateX: slideAnim }] }]}
       >
         <Text style={styles.menuTitle}>Menú</Text>
 
-        <TouchableOpacity style={styles.menuItem} onPress={toggleMenu}>
+        <TouchableOpacity
+          style={styles.menuItem}
+          onPress={() => handleNavigate("/menu/menuCiudadano")} 
+        >
           <Text style={styles.menuText}>Inicio</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.menuItem} onPress={toggleMenu}>
+        <TouchableOpacity
+          style={styles.menuItem}
+          onPress={() => handleNavigate("/menu/menuCiudadano")} //cambiar ruta
+        >
           <Text style={styles.menuText}>Perfil</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.menuItem} onPress={toggleMenu}>
+        <TouchableOpacity
+          style={styles.menuItem}
+          onPress={handleLogout} 
+        >
           <Text style={styles.menuText}>Cerrar sesión</Text>
         </TouchableOpacity>
       </Animated.View>
@@ -83,10 +103,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     paddingHorizontal: 14,
-    
-    paddingTop: 10, 
-    paddingBottom: 12, 
-    backgroundColor: "white", 
+    paddingTop: 10,
+    paddingBottom: 12,
+    backgroundColor: "white",
     zIndex: 102,
   },
   menuButton: { padding: 5 },
@@ -105,7 +124,7 @@ const styles = StyleSheet.create({
 
   sideMenu: {
     position: "absolute",
-    top: 60, 
+    top: 60,
     left: 0,
     width: 180,
     backgroundColor: "#fff",
