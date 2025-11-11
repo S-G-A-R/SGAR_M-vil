@@ -1,7 +1,9 @@
-import { Ionicons, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
-import React, { useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import HeaderMenu from '@/components/HeaderMenu';
+import { Ionicons, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
+import React from 'react';
+import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+
+const { width, height } = Dimensions.get("window");
 
 export default function menuScreen() {
 
@@ -154,8 +156,8 @@ const styles = StyleSheet.create({
     gap: 20,
   },
   card: {
-    width: 180,
-    height: 140,
+    width: width * 0.32,   // 42% del ancho de pantalla
+    height: height * 0.15, // 17% de la altura de pantalla
     backgroundColor: '#fff',
     borderRadius: 20,
     alignItems: 'center',
