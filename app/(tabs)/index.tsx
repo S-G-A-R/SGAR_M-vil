@@ -1,98 +1,172 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
-
-import { HelloWave } from '@/components/hello-wave';
-import ParallaxScrollView from '@/components/parallax-scroll-view';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { Link } from 'expo-router';
+import HeaderMenu from '@/components/HeaderMenu';
+import { useRouter } from 'expo-router';
+import React, { useState } from 'react';
+import {
+  Image,
+  Modal,
+  Pressable,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 
 export default function HomeScreen() {
-  return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <Link href="/modal">
-          <Link.Trigger>
-            <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-          </Link.Trigger>
-          <Link.Preview />
-          <Link.Menu>
-            <Link.MenuAction title="Action" icon="cube" onPress={() => alert('Action pressed')} />
-            <Link.MenuAction
-              title="Share"
-              icon="square.and.arrow.up"
-              onPress={() => alert('Share pressed')}
-            />
-            <Link.Menu title="More" icon="ellipsis">
-              <Link.MenuAction
-                title="Delete"
-                icon="trash"
-                destructive
-                onPress={() => alert('Delete pressed')}
-              />
-            </Link.Menu>
-          </Link.Menu>
-        </Link>
 
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+const [modalVisible, setModalVisible] = useState(false);
+const router = useRouter();
+
+  return (
+    <View style={styles.container}>
+      <View style={styles.headerWrapper}>
+        <HeaderMenu />
+      </View>
+      {/* 🔹 Bloque de botones arriba */}
+      <View style={styles.buttonGrid}>
+        <TouchableOpacity style={styles.roleButton}
+        onPress={() => router.push('/inicio/menuCiudadano')}>
+          <Text style={styles.roleText}>Ciudadano</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.roleButton}>
+          <Text style={styles.roleText}>Operador</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.roleButton}>
+          <Text style={styles.roleText}>Asociado</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.roleButton}>
+          <Text style={styles.roleText}>Organización</Text>
+        </TouchableOpacity>
+      </View>
+
+      {/*Logo*/}
+      <Image
+        source={require('../../assets/images/logoPrinc.jpg')}
+        style={styles.logo}
+      />
+
+      {/* Texto de bienvenida */}
+      <Text style={styles.welcomeText}>¡Bienvenido a S.G.A.R!</Text>
+
+      {/* Botón de "Acerca de nosotros"*/}
+      <TouchableOpacity
+        style={styles.aboutButton}
+        onPress={() => setModalVisible(true)}
+      >
+        <Text style={styles.aboutText}>Acerca de nosotros</Text>
+      </TouchableOpacity>
+
+      {/* modal para info acerca de nosotros*/}
+      <Modal
+        transparent={true}
+        animationType="fade"
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <Pressable
+          style={styles.overlay}
+          onPress={() => setModalVisible(false)} 
+        >
+          <View style={styles.modalBox}>
+            <Text style={styles.modalTitle}>🌱 Sobre EcoSGAR</Text>
+            <Text style={styles.modalContent}>
+              Sistema de Gestión de Aseo y Residuos. Sistema creado
+             para optimizar los procesos de recolección de basura, 
+             limpieza y gestión de desechos en municipios y empresas de aseo.
+            </Text>
+          </View>
+        </Pressable>
+      </Modal>
+    </View>
+
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
+  container: {
+    flex: 1,
+    backgroundColor: '#dcdcdc',
     alignItems: 'center',
-    gap: 8,
+    justifyContent: 'center',
+    paddingTop: 60,
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
+  buttonGrid: {
+    flexDirection: 'column',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    gap: 15,
+    marginBottom: 30,
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
+  headerWrapper: {
     position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    zIndex: 20, 
+  },
+  roleButton: {
+    width: 150,
+    height: 60,
+    backgroundColor: '#fff',
+    borderRadius: 15,
+    alignItems: 'center',
+    justifyContent: 'center',
+    elevation: 5,
+    shadowColor: '#000',
+    shadowOpacity: 0.2,
+    shadowOffset: { width: 0, height: 3 },
+  },
+  roleText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#333',
+  },
+  logo: {
+    width: 150,
+    height: 150,
+    resizeMode: 'contain',
+    marginBottom: 20,
+  },
+  welcomeText: {
+    fontSize: 24,
+    fontWeight: '700',
+    color: '#333',
+    marginBottom: 25,
+  },
+  aboutButton: {
+    backgroundColor: '#fff',
+    paddingHorizontal: 30,
+    paddingVertical: 12,
+    borderRadius: 20,
+    elevation: 3,
+  },
+  aboutText: {
+    fontSize: 16,
+    fontWeight: '500',
+    color: '#67978d',
+  },
+  overlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.4)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalBox: {
+    width: 300,
+    backgroundColor: '#fff',
+    borderRadius: 15,
+    padding: 20,
+    alignItems: 'center',
+    elevation: 10,
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: '700',
+    marginBottom: 10,
+    color: '#2e5d52',
+  },
+  modalContent: {
+    fontSize: 15,
+    textAlign: 'center',
+    color: '#444',
   },
 });
