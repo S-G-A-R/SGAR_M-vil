@@ -71,7 +71,7 @@ export default function MenuCiudadanoScreen() {
 
           <TouchableOpacity
             style={styles.card}
-            onPress={() => router.push("/menu/horarios")} //Cambiar la ruta
+            onPress={() => router.push("/menu/formulario")} //Cambiar la ruta
           >
             <MaterialCommunityIcons name="page-next" size={34} color="#000" />
             <Text style={styles.cardText}>Formularios</Text>
