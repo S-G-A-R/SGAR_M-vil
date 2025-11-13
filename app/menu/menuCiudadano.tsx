@@ -94,7 +94,7 @@ export default function MenuCiudadanoScreen() {
 
           <TouchableOpacity
             style={styles.card}
-            onPress={() => router.push("/menu/horarios")} //Cambiar la ruta
+            onPress={() => router.push("/menu/asistente")} 
           >
             <TouchableOpacity
               style={{ padding: 10, backgroundColor: "#eee", borderRadius: 10 }}
