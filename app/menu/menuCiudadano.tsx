@@ -9,13 +9,16 @@ import {
   Text,
   TouchableOpacity,
   View,
-  ScrollView, 
+  ScrollView,
 } from "react-native";
 import HeaderMenu from "@/components/HeaderMenu";
-import { useRouter } from "expo-router"; 
+import { useRouter } from "expo-router";
+import { Dimensions } from "react-native";
+const { width, height } = Dimensions.get("window");
+
 
 export default function MenuCiudadanoScreen() {
-  const router = useRouter(); 
+  const router = useRouter();
 
   return (
     <View style={styles.container}>
@@ -43,7 +46,7 @@ export default function MenuCiudadanoScreen() {
 
           <TouchableOpacity
             style={styles.card}
-            onPress={() => router.push("/menu/ubicacion")} 
+            onPress={() => router.push("/menu/ubicacion")}
           >
             <MaterialCommunityIcons name="map-marker" size={34} color="#000" />
             <Text style={styles.cardText}>Ubicaciones</Text>
@@ -109,13 +112,13 @@ export default function MenuCiudadanoScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "lightgrey", 
+    backgroundColor: "lightgrey",
   },
   scrollContainer: {
     alignItems: "center",
     justifyContent: "flex-start",
     paddingTop: 30,
-    paddingBottom: 30, 
+    paddingBottom: 30,
   },
   title: {
     fontSize: 24,
@@ -127,29 +130,30 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "center",
-    gap: 15, 
+    gap: 15,
     paddingHorizontal: 10,
   },
   card: {
-    width: 160,
-    height: 120,
-    backgroundColor: "#fff",
+    width: width * 0.42,   // 42% del ancho de pantalla
+    height: height * 0.17, // 17% de la altura de pantalla
+    backgroundColor: '#fff',
     borderRadius: 20,
-    alignItems: "center",
-    justifyContent: "center",
-    shadowColor: "#000",
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.2,
     shadowRadius: 4,
     elevation: 4,
   },
+
   cardText: {
     marginTop: 8,
-    fontSize: 17, 
+    fontSize: 17,
     color: "#333",
     fontWeight: "500",
     textAlign: "center",
     paddingHorizontal: 5,
   },
-  
+
 });
