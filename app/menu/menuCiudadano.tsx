@@ -82,7 +82,7 @@ export default function MenuCiudadanoScreen() {
 
           <TouchableOpacity
             style={styles.card}
-            onPress={() => router.push("/menu/horarios")} //Cambiar la ruta
+            onPress={() => router.push("/menu/radar")} //Cambiar la ruta
           >
             <MaterialCommunityIcons
               name="map-marker-radius"
