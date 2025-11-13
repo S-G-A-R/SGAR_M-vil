@@ -10,6 +10,12 @@ import {
   View,
   KeyboardTypeOptions,
 } from "react-native";
+import { Dimensions } from 'react-native';
+
+const { height } = Dimensions.get('window');
+
+const dynamicPadding = height * 0.16;
+
 
 export default function LoginScreen() {
   const router = useRouter();
@@ -148,14 +154,17 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
+   
+    
   },
   
   body: {
     flex: 1,
     justifyContent: "flex-start", 
-    paddingTop: 80, 
     alignItems: "center",
     paddingHorizontal: 20,
+    paddingTop: dynamicPadding,
+    
   },
   logo: {
     width: 200,

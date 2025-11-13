@@ -12,6 +12,11 @@ import { ThemedText } from "@/components/themed-text";
 import { Image } from "expo-image";
 import { useRouter } from "expo-router";
 import { Picker } from "@react-native-picker/picker"; 
+import { Dimensions } from 'react-native';
+
+const { height } = Dimensions.get('window');
+
+const dynamicPadding = height * 0.16;
 
 
 const ZONAS_API = [

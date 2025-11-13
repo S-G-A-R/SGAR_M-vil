@@ -11,6 +11,11 @@ import { useRouter } from "expo-router";
 import Checkbox from "expo-checkbox"; 
 import { ThemedView } from "@/components/themed-view";
 import { ThemedText } from "@/components/themed-text";
+import { Dimensions } from 'react-native';
+
+const { height } = Dimensions.get('window');
+
+const dynamicPadding = height * 0.07;
 
 export default function RegistroOrganizacionScreen() {
   const router = useRouter();
@@ -168,6 +173,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff", 
+     paddingTop: dynamicPadding,
   },
   scrollContainer: {
     paddingHorizontal: 20,

@@ -13,6 +13,11 @@ import { ThemedView } from "@/components/themed-view";
 import { ThemedText } from "@/components/themed-text";
 import { Image } from "expo-image";
 import * as ImagePicker from "expo-image-picker"; 
+import { Dimensions } from 'react-native';
+
+const { height } = Dimensions.get('window');
+
+const dynamicPadding = height * 0.03;
 
 export default function RegistroAsociadoScreen() {
   const router = useRouter();
@@ -212,11 +217,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
+     paddingTop: dynamicPadding,
+   
   },
   scrollContainer: {
     paddingHorizontal: 20,
     paddingVertical: 30,
     alignItems: "center",
+    
   },
   logo: {
     width: 150,
@@ -233,6 +241,7 @@ const styles = StyleSheet.create({
   form: {
     width: "100%",
     maxWidth: 400,
+    
   },
   label: {
     fontSize: 15,
