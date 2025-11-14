@@ -1,4 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
   Animated,
@@ -10,38 +11,33 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
-import { useRouter, Href } from "expo-router";
 
 const { height, width } = Dimensions.get("window");
 
+// 🔹 función para tamaños proporcionales pero iguales visualmente
+const wp = (v) => (width * v) / 100;
+
 export default function HeaderMenu() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const slideAnim = useState(new Animated.Value(-200))[0];
-  const router = useRouter(); 
+
+  // 🔹 menú ahora se adapta a todos los teléfonos
+  const menuWidth = wp(70);
+
+  const slideAnim = useState(new Animated.Value(-menuWidth))[0];
+  const router = useRouter();
 
   const toggleMenu = () => {
-    const toValue = isMenuOpen ? -200 : 0;
     Animated.timing(slideAnim, {
-      toValue,
+      toValue: isMenuOpen ? -menuWidth : 0,
       duration: 250,
       useNativeDriver: true,
     }).start();
     setIsMenuOpen(!isMenuOpen);
   };
 
-    const handleNavigate = (path: Href) => { 
-      toggleMenu();
-      router.push(path); 
-    };
-
-  const handleLogout = () => {
-    toggleMenu(); 
-    // Aquí ira el token de sesión
-    router.replace("/menu/menuCiudadano"); 
-  };
-
   return (
     <View style={{ zIndex: 100 }}>
+      {/* Header */}
       <View style={styles.topBar}>
         <View style={styles.leftSection}>
           <TouchableOpacity style={styles.menuButton} onPress={toggleMenu}>
@@ -54,44 +50,75 @@ export default function HeaderMenu() {
           />
         </View>
 
-        <TouchableOpacity style={styles.loginButton}>
-          <Ionicons name="person-circle-outline" size={28} color="#000" />
-          <Text style={styles.loginText}>Usuario</Text>
+        <TouchableOpacity style={styles.profileButton}>
+          <Image
+            source={require("@/assets/images/userIcon.jpg")}
+            style={styles.profileImage}
+          />
         </TouchableOpacity>
       </View>
 
+      {/* Overlay */}
       {isMenuOpen && (
         <TouchableWithoutFeedback onPress={toggleMenu}>
           <View style={styles.overlay} />
         </TouchableWithoutFeedback>
       )}
 
-      
+      {/* Menú lateral */}
       <Animated.View
-        style={[styles.sideMenu, { transform: [{ translateX: slideAnim }] }]}
+        style={[
+          styles.sideMenu,
+          {
+            width: menuWidth,
+            transform: [{ translateX: slideAnim }],
+          },
+        ]}
       >
-        <Text style={styles.menuTitle}>Menú</Text>
+        <View style={styles.profileContainer}>
+          <Image
+            source={require("@/assets/images/userIcon.jpg")}
+            style={styles.menuProfileImage}
+          />
+          <Text style={styles.userName}>Usuario Ciudadano</Text>
+          <Text style={styles.userEmail}>usuario@email.com</Text>
+        </View>
 
         <TouchableOpacity
-          style={styles.menuItem}
-          onPress={() => handleNavigate("/menu/menuCiudadano")} 
+          style={[styles.menuItem, styles.buttonStyled]}
+          onPress={() => {
+            toggleMenu();
+            router.replace("/menu/menuCiudadano");
+          }}
         >
-          <Text style={styles.menuText}>Inicio</Text>
+          <Ionicons name="home-outline" size={18} color="#333" style={{ marginRight: 6 }} />
+          <Text style={styles.buttonText}>Inicio</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={styles.menuItem}
-          onPress={() => handleNavigate("/menu/menuCiudadano")} //cambiar ruta
+          style={[styles.menuItem, styles.buttonStyled]}
+          onPress={() => {
+            toggleMenu();
+            router.replace("/menu/menuCiudadano");
+          }}
         >
-          <Text style={styles.menuText}>Perfil</Text>
+          <Ionicons name="person" size={18} color="#333" style={{ marginRight: 6 }} />
+          <Text style={styles.buttonText}>Perfil</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity
-          style={styles.menuItem}
-          onPress={handleLogout} 
-        >
-          <Text style={styles.menuText}>Cerrar sesión</Text>
-        </TouchableOpacity>
+        {/* Cerrar Sesión fijo abajo */}
+        <View style={styles.logoutContainer}>
+          <TouchableOpacity
+            style={styles.logoutButton}
+            onPress={() => {
+              toggleMenu();
+              router.replace("/login");
+            }}
+          >
+            <Ionicons name="log-out-outline" size={20} color="#d9534f" />
+            <Text style={styles.logoutText}>Cerrar sesión</Text>
+          </TouchableOpacity>
+        </View>
       </Animated.View>
     </View>
   );
@@ -102,35 +129,45 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    paddingHorizontal: 14,
-    paddingTop: 30,
-    paddingBottom: 12,
-    backgroundColor: "white",
+    paddingHorizontal: 15,
+    paddingTop: 50,
+    backgroundColor: "#c4c0c0ff",
     zIndex: 102,
   },
+
   menuButton: { padding: 5 },
+
   logo: {
-    width: 60,
-    height: 30,
-    resizeMode: "contain",
+    width: wp(30),
+    height: wp(9),
+    borderRadius: 10,
   },
-  loginButton: { flexDirection: "row", alignItems: "center" },
-  loginText: {
-    fontSize: 17,
-    color: "#00050aff",
-    marginLeft: 4,
-    fontWeight: "500",
+
+  leftSection: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+  },
+
+  profileButton: {
+    borderRadius: 50,
+    overflow: "hidden",
+  },
+  profileImage: {
+    width: wp(10),
+    height: wp(10),
+    borderRadius: 50,
   },
 
   sideMenu: {
     position: "absolute",
-    top: 60,
+    top: 100,
     left: 0,
-    width: 180,
+    height: height - 100,
     backgroundColor: "#fff",
     paddingVertical: 15,
-    borderTopRightRadius: 15,
-    borderBottomRightRadius: 15,
+    borderTopRightRadius: 20,
+    borderBottomRightRadius: 20,
     shadowColor: "#000",
     shadowOffset: { width: 3, height: 3 },
     shadowOpacity: 0.2,
@@ -138,6 +175,7 @@ const styles = StyleSheet.create({
     elevation: 10,
     zIndex: 103,
   },
+
   overlay: {
     position: "absolute",
     top: 0,
@@ -147,19 +185,70 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0,0,0,0.25)",
     zIndex: 101,
   },
-  menuTitle: {
-    fontWeight: "bold",
-    fontSize: 16,
-    marginBottom: 10,
-    marginLeft: 15,
-    color: "#00050aff",
-  },
-  menuItem: { paddingVertical: 10, paddingHorizontal: 15 },
-  menuText: { fontSize: 15, color: "#333" },
 
-  leftSection: {
-    flexDirection: "row",
+  profileContainer: {
     alignItems: "center",
-    gap: 5,
+    marginBottom: 25,
   },
+  menuProfileImage: {
+    width: wp(20),
+    height: wp(20),
+    borderRadius: 50,
+    marginBottom: 10,
+  },
+  userName: {
+    fontWeight: "600",
+    fontSize: 16,
+    color: "#000",
+  },
+  userEmail: {
+    fontSize: 13,
+    color: "#666",
+  },
+
+  menuItem: {
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+  },
+  menuText: {
+    fontSize: 15,
+    color: "#333",
+  },
+
+  logoutContainer: {
+    position: "absolute",
+    bottom: 50,
+    left: 0,
+    width: "98%",
+    paddingHorizontal: 20,
+  },
+  logoutButton: {
+    flexDirection: "column",
+    alignItems: "center",
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    backgroundColor: "#f8d7da",
+    borderRadius: 10,
+  },
+  logoutText: {
+    color: "#d9534f",
+    fontWeight: "700",
+    marginLeft: 10,
+  },
+  buttonStyled: {
+    flexDirection: "column",
+    alignItems: "center",
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: "#bfbfbf",
+    backgroundColor: "#fff",
+  },
+  buttonText: {
+    fontSize: 15,
+    color: "#333",
+    fontWeight: "600",
+  },
+
 });
