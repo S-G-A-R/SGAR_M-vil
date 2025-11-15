@@ -43,7 +43,7 @@ export default function RadarCompactScreen() {
           <View style={styles.headerBox}>
             <View style={styles.logoContainer}>
               <Image
-                source={require("@/assets/images/raccoon.png")}
+                source={require("@/assets/images/mapacheN.jpeg")}
                 style={styles.logo}
                 resizeMode="contain"
               />
@@ -150,7 +150,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 10,
   },
-  logo: { width: 38, height: 38, tintColor: COLOR_BLANCO },
+  logo: { width: 90, height: 68,},
   title: { color: COLOR_BLANCO, fontSize: 22, fontWeight: '700', textAlign: 'center' },
 
   

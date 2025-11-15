@@ -45,7 +45,7 @@ export default function PuntosRecoleccionListScreen() {
                 <Text style={styles.screenSubtitle}>SGAR</Text>
             </View>
             <Image
-                source={require("@/assets/images/ecoSgar.png")} 
+                source={require("@/assets/images/mapacheN.jpeg")} 
                 style={styles.headerLogo}
                 resizeMode="contain"
             />
@@ -136,9 +136,9 @@ const styles = StyleSheet.create({
         color: COLOR_GRIS_CLARO, 
     },
     headerLogo: { 
-        width: 40, 
-        height: 40, 
-        tintColor: COLOR_BLANCO, 
+        width: 90, 
+        height: 60, 
+         
     },
 
     searchContainer: {

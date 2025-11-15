@@ -24,7 +24,7 @@ export default function NotificationCiudadanoScreen() {
                 
                
                 <Image
-                    source={require("@/assets/images/ecoSgar.png")} 
+                    source={require("@/assets/images/mapacheB.jpeg")} 
                     style={styles.mainLogo}
                     resizeMode="contain"
                 />
@@ -39,7 +39,7 @@ export default function NotificationCiudadanoScreen() {
                    
                     <View style={styles.cardContent}>
                         <Image
-                            source={require("@/assets/images/ecoSgar.png")} 
+                            source={require("@/assets/images/mapacheB.jpeg")} 
                             style={styles.cardLogo}
                             resizeMode="contain"
                         />
@@ -84,10 +84,9 @@ const styles = StyleSheet.create({
     },
 
     mainLogo: {
-        width: 80,
-        height: 80,
+        width: 200,
+        height: 100,
         marginBottom: 5,
-        tintColor: COLOR_NEGRO_PRINCIPAL,
     },
     mainTitle: {
         fontSize: 24,
@@ -125,10 +124,9 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     cardLogo: {
-        width: 30,
+        width: 35,
         height: 30,
-        marginRight: 10,
-        tintColor: COLOR_NEGRO_PRINCIPAL,
+        marginRight: 9,
     },
     cardText: {
         fontSize: 16,
