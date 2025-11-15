@@ -1,10 +1,9 @@
 import React from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, SafeAreaView } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, SafeAreaView, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import HeaderMenu from '@/components/HeaderMenu'; 
 import { useNavigation } from '@react-navigation/native'; 
 
-// --- DEFINICIONES DE TIPOS ---
 type RecoleccionPoint = {
     id: string;
     nombre: string;
@@ -15,65 +14,78 @@ type RecoleccionPoint = {
     lon: number;
 };
 
-// --- SIMULACIÓN DE DATOS ---
+//datos de prueba
 const MOCK_POINTS: RecoleccionPoint[] = [
-    {
-        id: 'P001',
-        nombre: 'Casa Principal',
-        direccion: 'Calle Las Palmas, #123',
-        estado: 'Activo',
-        proximaRecoleccion: 'Hoy, 16:30 hrs',
-        lat: 13.71,
-        lon: -89.20,
-    },
-    {
-        id: 'P002',
-        nombre: 'Apartamento Playa',
-        direccion: 'Av. El Sol, Lote 5',
-        estado: 'Inactivo',
-        proximaRecoleccion: 'Mañana, 08:00 hrs',
-        lat: 13.50,
-        lon: -89.45,
-    },
+    { id: 'P001', nombre: 'Casa Principal', direccion: 'Calle Las Palmas, #123', estado: 'Activo', proximaRecoleccion: 'Hoy, 16:30 hrs', lat: 13.71, lon: -89.20, },
+    { id: 'P002', nombre: 'Apartamento Playa', direccion: 'Av. El Sol, Lote 5', estado: 'Inactivo', proximaRecoleccion: 'Mañana, 08:00 hrs', lat: 13.50, lon: -89.45, },
+    { id: 'P003', nombre: 'Centro Comercial', direccion: '25 Av. Norte, #345', estado: 'Activo', proximaRecoleccion: 'Miércoles, 14:00 hrs', lat: 13.70, lon: -89.19, },
+    { id: 'P004', nombre: 'Bodega Industrial', direccion: 'Vía Panamericana, Km 10', estado: 'Activo', proximaRecoleccion: 'Viernes, 09:30 hrs', lat: 13.75, lon: -89.25, },
+    { id: 'P005', nombre: 'Edificio Residencial', direccion: 'Calle El Mirador, #10', estado: 'Inactivo', proximaRecoleccion: 'Sábado, 11:00 hrs', lat: 13.68, lon: -89.22, },
 ];
 
-// --- COMPONENTE PRINCIPAL ---
+const COLOR_NEGRO_PRINCIPAL = '#4b4b4b';
+const COLOR_GRIS_FONDO = '#f4f4f4';
+const COLOR_BLANCO = '#ffffff';
+const COLOR_GRIS_CLARO = '#e0e0e0';
+const COLOR_GRIS_BORDE = '#cccccc';
+const COLOR_GRIS_TEXTO = '#333333';
+const COLOR_AZUL_BOTON = '#007BFF'; 
 
 export default function PuntosRecoleccionListScreen() {
     const navigation = useNavigation<any>(); 
 
     const handleSelectPoint = (point: RecoleccionPoint) => {
-        // 🚨 CRÍTICO: Navegamos DE VUELTA al radar (la pantalla principal)
-        // y le pasamos los datos del punto seleccionado.
-        navigation.navigate('radar', { point }); 
+        navigation.navigate('menu/radar', { point }); 
     };
+
+    const CustomListHeader = () => (
+        <View style={styles.customHeaderBox}>
+            <View style={styles.headerTitleContainer}>
+                <Text style={styles.screenTitle}>Mis Puntos de Recolección</Text>
+                <Text style={styles.screenSubtitle}>SGAR</Text>
+            </View>
+            <Image
+                source={require("@/assets/images/ecoSgar.png")} 
+                style={styles.headerLogo}
+                resizeMode="contain"
+            />
+        </View>
+    );
+
+    const SearchAndFilterSection = () => (
+        <View style={styles.searchContainer}>
+            <View style={styles.searchInputRow}>
+                <View style={styles.inputBox}>
+                    <Text style={styles.inputPlaceholder}>Tipo de residuo</Text>
+                </View>
+                <TouchableOpacity style={styles.searchButton}>
+                    <Ionicons name="search-outline" size={20} color={COLOR_BLANCO} />
+                </TouchableOpacity>
+            </View>
+
+           
+            <View style={styles.filterRow}>
+                <TouchableOpacity style={[styles.filterButton, styles.buttonGreen]}>
+                    <Text style={styles.filterTextGreen}>Ver Distancia</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={[styles.filterButton, styles.buttonYellow]}>
+                    <Text style={styles.filterTextYellow}>Ver Horario</Text>
+                </TouchableOpacity>
+            </View>
+        </View>
+    );
 
     const renderPointItem = ({ item }: { item: RecoleccionPoint }) => (
         <TouchableOpacity 
-            style={styles.card} 
+            style={styles.listItemRow} 
             onPress={() => handleSelectPoint(item)}
         >
-            <View style={styles.cardHeader}>
-                <Text style={styles.cardTitle}>{item.nombre}</Text>
-                <View style={[
-                    styles.stateBadge, 
-                    item.estado === 'Activo' ? styles.badgeActive : styles.badgeInactive
-                ]}>
-                    <Text style={styles.badgeText}>{item.estado}</Text>
-                </View>
-            </View>
+            <Text style={styles.listItemTitle}>{item.nombre}</Text>
             
-            <View style={styles.cardBody}>
-                <Ionicons name="location-outline" size={16} color="#555" />
-                <Text style={styles.cardAddress}>{item.direccion}</Text>
-            </View>
-
-            <View style={styles.cardFooter}>
-                <Ionicons name="calendar-outline" size={16} color="#007BFF" />
-                <Text style={styles.cardSchedule}>Próxima recolección: **{item.proximaRecoleccion}**</Text>
-            </View>
-            
-            <Ionicons name="chevron-forward-outline" size={24} color="#007BFF" style={styles.chevron} />
+            <TouchableOpacity style={styles.mapButton}>
+                <Text style={styles.mapButtonText}>Ver en mapa</Text>
+                <Ionicons name="map-outline" size={16} color={COLOR_BLANCO} />
+            </TouchableOpacity>
         </TouchableOpacity>
     );
 
@@ -81,10 +93,11 @@ export default function PuntosRecoleccionListScreen() {
         <SafeAreaView style={styles.fullContainer}>
             <HeaderMenu />
             
-            <View style={styles.header}>
-                <Text style={styles.screenTitle}>Mis Puntos de Recolección</Text>
-            </View>
+            <CustomListHeader />
+            
+            <SearchAndFilterSection />
 
+            
             <FlatList
                 data={MOCK_POINTS}
                 renderItem={renderPointItem}
@@ -96,34 +109,128 @@ export default function PuntosRecoleccionListScreen() {
     );
 }
 
-// --- ESTILOS (Mantenidos) ---
 const styles = StyleSheet.create({
-    fullContainer: { flex: 1, backgroundColor: '#f4f4f4', },
-    header: { padding: 15, backgroundColor: 'white', borderBottomWidth: 1, borderBottomColor: '#eee', },
-    screenTitle: { fontSize: 22, fontWeight: 'bold', color: '#333', },
-    listContent: { padding: 10, },
-    card: {
-        backgroundColor: 'white',
-        padding: 15,
-        borderRadius: 10,
-        marginVertical: 8,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 1 },
-        shadowOpacity: 0.1,
-        shadowRadius: 1,
-        elevation: 2,
-        position: 'relative',
+    fullContainer: { flex: 1, backgroundColor: COLOR_GRIS_FONDO },
+    
+    customHeaderBox: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        backgroundColor: COLOR_NEGRO_PRINCIPAL,
+        paddingHorizontal: 15,
+        paddingVertical: 15,
+        borderBottomWidth: 1,
+        borderBottomColor: '#333',
     },
-    cardHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8, },
-    cardTitle: { fontSize: 18, fontWeight: 'bold', color: '#333', },
-    cardBody: { flexDirection: 'row', alignItems: 'center', marginBottom: 5, },
-    cardAddress: { marginLeft: 5, fontSize: 14, color: '#555', flex: 1, },
-    cardFooter: { flexDirection: 'row', alignItems: 'center', marginTop: 5, },
-    cardSchedule: { marginLeft: 5, fontSize: 14, color: '#007BFF', fontWeight: '600', },
-    stateBadge: { paddingHorizontal: 8, paddingVertical: 3, borderRadius: 15, },
-    badgeActive: { backgroundColor: '#D4EDDA', },
-    badgeInactive: { backgroundColor: '#F8D7DA', },
-    badgeText: { fontSize: 12, fontWeight: 'bold', color: '#333', },
-    chevron: { position: 'absolute', right: 15, top: '50%', marginTop: -12, },
+    headerTitleContainer: {
+        flexDirection: 'column',
+    },
+    screenTitle: { 
+        fontSize: 20, 
+        fontWeight: 'bold', 
+        color: COLOR_BLANCO, 
+    },
+    screenSubtitle: { 
+        fontSize: 16, 
+        fontWeight: '500', 
+        color: COLOR_GRIS_CLARO, 
+    },
+    headerLogo: { 
+        width: 40, 
+        height: 40, 
+        tintColor: COLOR_BLANCO, 
+    },
+
+    searchContainer: {
+        backgroundColor: COLOR_BLANCO,
+        padding: 15,
+        borderBottomWidth: 1,
+        borderBottomColor: COLOR_GRIS_BORDE,
+    },
+    searchInputRow: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: 10,
+    },
+    inputBox: {
+        flex: 1,
+        backgroundColor: COLOR_GRIS_CLARO,
+        paddingVertical: 10,
+        paddingHorizontal: 15,
+        borderRadius: 5,
+        marginRight: 10,
+        height: 40, 
+        justifyContent: 'center',
+    },
+    inputPlaceholder: {
+        color: '#666',
+        fontSize: 15,
+    },
+    searchButton: {
+        backgroundColor: COLOR_NEGRO_PRINCIPAL,
+        padding: 10,
+        borderRadius: 5,
+        height: 40,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    filterRow: {
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+    },
+    filterButton: {
+        paddingVertical: 8,
+        paddingHorizontal: 12,
+        borderRadius: 5,
+        borderWidth: 1,
+        marginRight: 10,
+    },
+    buttonGreen: {
+        borderColor: '#8BC34A', 
+    },
+    filterTextGreen: {
+        color: '#8BC34A',
+        fontWeight: 'bold',
+    },
+    buttonYellow: {
+        borderColor: '#FFC107', 
+    },
+    filterTextYellow: {
+        color: '#FFC107', 
+        fontWeight: 'bold',
+    },
+
+    listContent: { 
+        paddingHorizontal: 15, 
+        paddingTop: 10 
+    },
+    listItemRow: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        backgroundColor: COLOR_BLANCO,
+        paddingVertical: 12,
+        borderBottomWidth: 1,
+        borderBottomColor: COLOR_GRIS_CLARO,
+    },
+    listItemTitle: {
+        fontSize: 16,
+        color: COLOR_GRIS_TEXTO,
+        fontWeight: '500',
+        flex: 1,
+    },
+    mapButton: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: COLOR_AZUL_BOTON, 
+        paddingHorizontal: 8,
+        paddingVertical: 5,
+        borderRadius: 5,
+    },
+    mapButtonText: {
+        color: COLOR_BLANCO,
+        fontSize: 13,
+        marginRight: 5,
+    },
     emptyText: { textAlign: 'center', marginTop: 50, fontSize: 16, color: '#999', }
 });
