@@ -30,6 +30,8 @@ export default function RootLayout() {
         <Stack.Screen name="menu/horarios" options={{ headerShown: false }} />
         <Stack.Screen name="menu/puntos-recoleccion" options={{ headerShown: false }} />
         <Stack.Screen name="menu/radar" options={{ headerShown: false }} />
+        <Stack.Screen name="menu/notificaciones" options={{ headerShown: false }} />
+
         
 
         <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />

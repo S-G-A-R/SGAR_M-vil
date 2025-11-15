@@ -38,7 +38,7 @@ export default function MenuCiudadanoScreen() {
 
           <TouchableOpacity
             style={styles.card}
-            onPress={() => router.push("/menu/horarios")} //Cambiar la ruta
+            onPress={() => router.push("/menu/notificaciones")} 
           >
             <Ionicons name="notifications" size={34} color="#000" />
             <Text style={styles.cardText}>Notificaciones</Text>
@@ -74,7 +74,7 @@ export default function MenuCiudadanoScreen() {
 
           <TouchableOpacity
             style={styles.card}
-            onPress={() => router.push("/menu/formulario")} //Cambiar la ruta
+            onPress={() => router.push("/menu/formulario")} 
           >
             <MaterialCommunityIcons name="page-next" size={34} color="#000" />
             <Text style={styles.cardText}>Formularios</Text>
@@ -82,7 +82,7 @@ export default function MenuCiudadanoScreen() {
 
           <TouchableOpacity
             style={styles.card}
-            onPress={() => router.push("/menu/radar")} //Cambiar la ruta
+            onPress={() => router.push("/menu/radar")} 
           >
             <MaterialCommunityIcons
               name="map-marker-radius"
