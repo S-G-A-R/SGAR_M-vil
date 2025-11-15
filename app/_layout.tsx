@@ -31,6 +31,8 @@ export default function RootLayout() {
         <Stack.Screen name="menu/puntos-recoleccion" options={{ headerShown: false }} />
         <Stack.Screen name="menu/radar" options={{ headerShown: false }} />
         <Stack.Screen name="menu/notificaciones" options={{ headerShown: false }} />
+        <Stack.Screen name="menu/publicidadProducto" options={{ headerShown: false }} />
+        <Stack.Screen name="menu/productoDetalle" options={{ headerShown: false }} />
 
         
 
