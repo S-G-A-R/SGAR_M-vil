@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "sgar01",
+    "name": "Sistema de Gestión de Aseo y Residuos",
     "slug": "sgar01",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
-    "scheme": "sgar01",
+    "icon": "./assets/images/sgar.jpeg",
+    "scheme": "Sistema de Gestión de Aseo y Residuos",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
