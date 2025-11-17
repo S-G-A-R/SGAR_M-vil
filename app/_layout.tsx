@@ -22,7 +22,7 @@ export default function RootLayout() {
         <Stack.Screen name="login/registro-organizacion" options={{ headerShown: false }} />
         <Stack.Screen name="login/registro" options={{ headerShown: false }} />
       
-      //Carpeta menu
+      //Carpeta menu ciudadano
         <Stack.Screen name="menu/menuCiudadano" options={{ headerShown: false }} />
         <Stack.Screen name="menu/formulario" options={{ headerShown: false }} />
         <Stack.Screen name="menu/asistente" options={{ headerShown: false }} />
@@ -34,7 +34,9 @@ export default function RootLayout() {
         <Stack.Screen name="menu/publicidadProducto" options={{ headerShown: false }} />
         <Stack.Screen name="menu/productoDetalle" options={{ headerShown: false }} />
 
-        
+      //Carpeta asociado
+        <Stack.Screen name="asociado/menuAsociado" options={{ headerShown: false }} />
+
 
         <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
       </Stack>

@@ -39,7 +39,7 @@ export default function LoginScreen() {
       } else if (rol === "operador") {
         router.push("/menu/menuCiudadano"); //cambiar ruta para operador
       } else if (rol === "asociado") {
-        router.push("/menu/menuCiudadano"); //cambiar ruta para asociado
+        router.push("/asociado/menuAsociado"); //cambiar ruta para asociado
       } else if (rol === "organizacion") {
         router.push("/menu/menuCiudadano"); //cambiar ruta para organización
       } else if (rol === "administrador") {
