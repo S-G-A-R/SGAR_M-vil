@@ -80,9 +80,13 @@ export default function HeaderMenu() {
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={styles.menuItem}
-          onPress={() => handleNavigate("/menu/menuCiudadano")} //cambiar ruta
+          style={[styles.menuItem, ]}
+          onPress={() => {
+            toggleMenu();
+            router.replace("/menu/perfil");
+          }}
         >
+        
           <Text style={styles.menuText}>Perfil</Text>
         </TouchableOpacity>
 
