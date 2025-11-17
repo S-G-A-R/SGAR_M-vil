@@ -99,7 +99,7 @@ export default function HeaderMenu() {
           style={[styles.menuItem, styles.buttonStyled]}
           onPress={() => {
             toggleMenu();
-            router.replace("/menu/menuCiudadano");
+            router.replace("/menu/perfil");
           }}
         >
           <Ionicons name="person" size={18} color="#333" style={{ marginRight: 6 }} />
