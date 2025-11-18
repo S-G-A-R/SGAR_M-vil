@@ -1,4 +1,3 @@
-import HeaderMenu from "@/components/HeaderMenu";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { Image } from "expo-image";
@@ -13,11 +12,14 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { Picker } from "@react-native-picker/picker";
 
 export default function IndexScreen() { 
   const router = useRouter();
   const [menuVisible, setMenuVisible] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
+  const [selectedResiduo, setSelectedResiduo] = useState("");
+  const [pickerVisible, setPickerVisible] = useState(false);
 
   const handleLoginOption = (rol: string) => {
     setMenuVisible(false);
@@ -26,7 +28,6 @@ export default function IndexScreen() {
 
   return (
     <ThemedView style={styles.container}>
-      
       <ThemedView style={styles.header}>
         <Image
           source={require("@/assets/images/sgar.jpg")}
@@ -42,24 +43,23 @@ export default function IndexScreen() {
 
           {menuVisible && (
             <View style={styles.dropdownMenu}>
-              {["Ciudadano", "Administrador", "Organizacion", "Asociado", "Operador"].map(
-                (rol) => (
-                  <Pressable
-                    key={rol}
-                    style={styles.dropdownItem}
-                    onPress={() => handleLoginOption(rol.toLowerCase())}
-                  >
-                    <ThemedText style={styles.dropdownText}>{rol}</ThemedText>
-                  </Pressable>
-                )
-              )}
+              {["Ciudadano","Asociado","Operador"].map((rol) => (
+                <Pressable
+                  key={rol}
+                  style={styles.dropdownItem}
+                  onPress={() => handleLoginOption(rol.toLowerCase())}
+                >
+                  <ThemedText style={styles.dropdownText}>{rol}</ThemedText>
+                </Pressable>
+              ))}
             </View>
           )}
         </View>
       </ThemedView>
 
-      
+
       <ThemedView style={styles.body}>
+        
         <Image
           source={require("@/assets/images/sgar.jpeg")}
           style={styles.bodyLogo}
@@ -68,7 +68,6 @@ export default function IndexScreen() {
 
         <Text style={styles.welcomeText}>¡Bienvenido a S.G.A.R!</Text>
 
-        
         <Text style={styles.descriptionText}>
           Optimiza la gestión de residuos y aprende a reciclar con nuestro juego
           interactivo.
@@ -81,18 +80,61 @@ export default function IndexScreen() {
           <Text style={styles.aboutText}>Acerca de nosotros</Text>
         </TouchableOpacity>
 
-        
         <TouchableOpacity
           style={[styles.aboutButton, styles.gameButton]} 
-          onPress={() => router.push("/menu/menuCiudadano")}// Cambiar ruta al juego
+          onPress={() => router.push("/menu/menuCiudadano")}
         >
           <Text style={[styles.aboutText, styles.gameButtonText]}>
             ♻️ Jugar a Reciclar
           </Text>
         </TouchableOpacity>
+
+        <View style={styles.searchRow}>
+          <Text style={styles.searchInput}>Consulta ambiental</Text>
+
+          <TouchableOpacity style={styles.searchIconButton}>
+            <Text style={styles.searchIconText}>🔍</Text>
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.optionsRow}>
+          <TouchableOpacity style={styles.optionBox}>
+            <Text style={styles.optionText}>TODO</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.optionBox}>
+            <Text style={styles.optionText}>MAPA</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.optionBox}
+            onPress={() => setPickerVisible(!pickerVisible)}
+          >
+            <Text style={styles.optionText}>TIPO DE RESIDUO</Text>
+          </TouchableOpacity>
+        </View>
+
+        {pickerVisible && (
+          <View style={styles.pickerContainer}>
+            <Picker
+              selectedValue={selectedResiduo}
+              onValueChange={(itemValue) => setSelectedResiduo(itemValue)}
+              style={styles.picker}
+            >
+              <Picker.Item label="Seleccionar tipo de residuo" value="" />
+              <Picker.Item label="Plástico" value="plastico" />
+              <Picker.Item label="Vidrio" value="vidrio" />
+              <Picker.Item label="Papel y cartón" value="papel" />
+              <Picker.Item label="Orgánico" value="organico" />
+              <Picker.Item label="Metales" value="metal" />
+              <Picker.Item label="Electrónicos" value="electro" />
+            </Picker>
+          </View>
+        )}
+
       </ThemedView>
 
-      
+      {/* MODAL */}
       <Modal
         transparent={true}
         animationType="fade"
@@ -118,10 +160,8 @@ export default function IndexScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-  },
+  container: { flex: 1, backgroundColor: "#fff" },
+
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -133,29 +173,13 @@ const styles = StyleSheet.create({
     borderBottomColor: "#eee",
     backgroundColor: "#fff",
   },
-  headerLogo: { 
-    width: 80,
-    height: 40,
-    resizeMode: "contain",
-  },
-  
-  icon: {
-    fontSize: 24,
-    color: "#000",
-  },
-  headerTitle: {
-    fontSize: 18,
-    fontWeight: "600",
-    color: "#000",
-  },
-  dropdownContainer: {
-    position: "relative",
-  },
 
-  dropdownTrigger: {
-    color: "#000",
-    fontSize: 20,
-  },
+  headerLogo: { width: 80, height: 40, resizeMode: "contain" },
+
+  dropdownContainer: { position: "relative" },
+
+  dropdownTrigger: { color: "#000", fontSize: 20 },
+
   dropdownMenu: {
     position: "absolute",
     top: 25,
@@ -166,42 +190,39 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     zIndex: 10,
     elevation: 3,
-    minWidth: 160,
+    minWidth: 180,
   },
-  dropdownItem: {
-    paddingVertical: 10,
-    paddingHorizontal: 16,
-  },
-  dropdownText: {
-    fontSize: 15,
-    color: "#333",
-  },
+
+  dropdownItem: { paddingVertical: 10, paddingHorizontal: 16 },
+
+  dropdownText: { fontSize: 15, color: "#333" },
+
   body: {
     flex: 1,
-    justifyContent: "center",
+    justifyContent: "flex-start",
     alignItems: "center",
+    width: "100%",
     padding: 20,
     backgroundColor: "#fff",
   },
-  bodyLogo: {
-    width: 300,
+
+  bodyLogo: { 
+    width: 300, 
     height: 200,
-    marginBottom: 50,
-    borderRadius: 10,
-  },
-  welcomeText: {
-    fontSize: 24,
-    fontWeight: "700",
-    color: "#333",
-    marginBottom: 5, // Menos espacio
-  },
-  descriptionText: { // <-- NUEVO ESTILO para descripción
+    marginTop: 35,
+    marginBottom: 20, 
+    borderRadius: 10 },
+
+  welcomeText: { fontSize: 24, fontWeight: "700", color: "#333", marginBottom: 5 },
+
+  descriptionText: {
     fontSize: 16,
     color: "#666",
     textAlign: "center",
     marginBottom: 30,
     paddingHorizontal: 20,
   },
+
   aboutButton: {
     backgroundColor: "#fff",
     paddingHorizontal: 30,
@@ -209,49 +230,60 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     elevation: 3,
     borderWidth: 1,
-    borderColor: '#eee'
-  },
-  aboutText: {
-    fontSize: 16,
-    fontWeight: "500",
-    color: "#67978d",
-  },
-  gameButton: { // <-- NUEVO ESTILO para botón de juego
-    backgroundColor: "#2e7d32", // Verde reciclaje
-    marginTop: 15,
-  },
-  gameButtonText: { // <-- NUEVO ESTILO para texto de juego
-    color: "#fff",
-    fontWeight: "600",
+    borderColor: "#eee",
+    marginBottom: 10,
   },
 
-  // ... (Estilos del Modal sin cambios)
-  overlay: {
+  aboutText: { fontSize: 16, fontWeight: "500", color: "#67978d" },
+
+  gameButton: { backgroundColor: "#2e7d32", marginBottom: 20 },
+
+  gameButtonText: { color: "#fff", fontWeight: "600" },
+
+  navBar: { width: "100%", marginBottom: 10 },
+
+  navTitle: { fontSize: 18, fontWeight: "700", color: "#2e7d32" },
+
+  searchRow: { flexDirection: "row", width: "100%", alignItems: "center", marginBottom: 15 },
+
+  searchInput: {
     flex: 1,
-    backgroundColor: "rgba(0,0,0,0.4)",
-    justifyContent: "center",
-    alignItems: "center",
+    backgroundColor: "#f2f2f2",
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    borderRadius: 8,
+    fontSize: 16,
+    color: "#555",
   },
-  modalBox: {
-    width: 300,
+
+  searchIconButton: { marginLeft: 10, backgroundColor: "#2e7d32", padding: 10, borderRadius: 8 },
+
+  searchIconText: { color: "#fff", fontSize: 20 },
+
+  optionsRow: { flexDirection: "row", justifyContent: "space-between", width: "100%", marginTop: 5 },
+
+  optionBox: {
+    flex: 1,
     backgroundColor: "#fff",
-    borderRadius: 15,
-    padding: 20,
-    alignItems: "center",
-    elevation: 10,
+    borderWidth: 1,
+    borderColor: "#ddd",
+    paddingVertical: 12,
+    marginHorizontal: 5,
+    borderRadius: 8,
+    elevation: 2,
   },
-  modalTitle: {
-    fontSize: 20,
-    fontWeight: "500",
-    marginBottom: 10,
-    color: "#2e5d52",
-  },
-  modalContent: {
-    fontSize: 20,
-    textAlign: "center",
-    color: "#444",
-  },
-  buttonWrapper: {}, // Estos estilos no se usaban
-  button: {},
-  buttonText: {},
+
+  optionText: { textAlign: "center", fontSize: 14, color: "#444", fontWeight: "600" },
+
+  pickerContainer: { width: "100%", marginTop: 10, borderRadius: 8, overflow: "hidden" },
+
+  picker: { backgroundColor: "#fff" },
+
+  overlay: { flex: 1, backgroundColor: "rgba(0,0,0,0.4)", justifyContent: "center", alignItems: "center" },
+
+  modalBox: { width: 300, backgroundColor: "#fff", borderRadius: 15, padding: 20, alignItems: "center", elevation: 10 },
+
+  modalTitle: { fontSize: 20, fontWeight: "500", marginBottom: 10, color: "#2e5d52" },
+
+  modalContent: { fontSize: 20, textAlign: "center", color: "#444" },
 });
