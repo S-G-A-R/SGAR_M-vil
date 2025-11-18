@@ -31,7 +31,7 @@ export default function AsociadosMenu() {
                     </TouchableOpacity>
                     <TouchableOpacity 
                         style={styles.card} 
-                        onPress={() => router.push("/asociado/comprarPlan")}>
+                        onPress={() => router.push("/asociado/indexProducto")}>
                         <Ionicons name="add-circle-outline" size={48} color={COLOR_ICONOS} />
                         <Text style={styles.cardText}>Registrar Producto</Text>
                     </TouchableOpacity>

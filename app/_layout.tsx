@@ -38,6 +38,11 @@ export default function RootLayout() {
         <Stack.Screen name="asociado/menuAsociado" options={{ headerShown: false }} />
         <Stack.Screen name="asociado/comprarPlan" options={{ headerShown: false }} />
         <Stack.Screen name="asociado/pagoPlan" options={{ headerShown: false }} />
+        <Stack.Screen name="asociado/indexProducto" options={{ headerShown: false }} />
+        <Stack.Screen name="asociado/productoCrear" options={{ headerShown: false }} />
+        <Stack.Screen name="asociado/productoDetalle" options={{ headerShown: false }} />
+        <Stack.Screen name="asociado/productoEditar" options={{ headerShown: false }} />
+
 
 
 
