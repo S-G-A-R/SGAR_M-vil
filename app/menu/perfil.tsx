@@ -1,11 +1,11 @@
 import React from "react";
-import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from "react-native";
 import { useRouter } from "expo-router";
+import HeaderMenu from "@/components/HeaderMenu"; // <<----- IMPORTA AQUÍ
 
 export default function Perfil() {
   const router = useRouter();
 
-  // Datos de ejemplo mientras no hay login real
   const user = {
     nombre: "Ejemplo Usuario",
     email: "usuario@ejemplo.com",
@@ -14,46 +14,49 @@ export default function Perfil() {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.profileSection}>
-        <Image
-          source={
-            user.foto
-              ? { uri: user.foto }
-              : require("@/assets/images/userIcon.jpg")
-          }
-          style={styles.profileImage}
-        />
+    <View style={{ flex: 1, backgroundColor: "#f5f5f5" }}>
+      {/* 🔹 HEADER MENU */}
+      <HeaderMenu />
 
-        <Text style={styles.name}>{user.nombre}</Text>
-        <Text style={styles.email}>{user.email}</Text>
-        <Text style={styles.role}>{user.rol}</Text>
-      </View>
+      {/* 🔹 CONTENIDO DE PERFIL */}
+      <ScrollView contentContainerStyle={styles.container}>
+        <View style={styles.profileSection}>
+          <Image
+            source={
+              user.foto
+                ? { uri: user.foto }
+                : require("@/assets/images/userIcon.jpg")
+            }
+            style={styles.profileImage}
+          />
 
-      <TouchableOpacity
-        style={styles.editButton}
-        onPress={() => console.log("Editar perfil")}
-      >
-        <Text style={styles.editText}>Editar perfil</Text>
-      </TouchableOpacity>
+          <Text style={styles.name}>{user.nombre}</Text>
+          <Text style={styles.email}>{user.email}</Text>
+          <Text style={styles.role}>{user.rol}</Text>
+        </View>
 
-      <TouchableOpacity
-        style={styles.logoutButton}
-        onPress={() => router.replace("/login")}
-      >
-        <Text style={styles.logoutText}>Cerrar sesión</Text>
-      </TouchableOpacity>
+        <TouchableOpacity style={styles.editButton}>
+          <Text style={styles.editText}>Editar perfil</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.logoutButton}
+          onPress={() => router.replace("/login")}
+        >
+          <Text style={styles.logoutText}>Cerrar sesión</Text>
+        </TouchableOpacity>
+      </ScrollView>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    paddingTop: 80,
+    paddingTop: 120, // 🔥 Espacio para que NO se meta debajo del header
     paddingHorizontal: 25,
-    backgroundColor: "#f5f5f5",
+    paddingBottom: 40,
   },
+
   profileSection: {
     alignItems: "center",
     marginBottom: 40,

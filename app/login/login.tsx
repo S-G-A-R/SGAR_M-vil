@@ -37,7 +37,7 @@ export default function LoginScreen() {
       if (rol === "ciudadano") {
         router.push("/menu/menuCiudadano");
       } else if (rol === "operador") {
-        router.push("/menu/menuCiudadano"); //cambiar ruta para operador
+        router.push("/operador/menuOperador"); //cambiar ruta para operador
       } else if (rol === "asociado") {
         router.push("/menu/menuCiudadano"); //cambiar ruta para asociado
       } else if (rol === "organizacion") {

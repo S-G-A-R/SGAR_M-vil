@@ -15,14 +15,14 @@ export default function RootLayout() {
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <Stack>
-        //Carpeta login
+        {/* //Carpeta login */}
         <Stack.Screen name="login/index" options={{ headerShown: false }} />
         <Stack.Screen name="login/login" options={{ headerShown: false }} />
         <Stack.Screen name="login/registro-asociado" options={{ headerShown: false }} />
         <Stack.Screen name="login/registro-organizacion" options={{ headerShown: false }} />
         <Stack.Screen name="login/registro" options={{ headerShown: false }} />
       
-      //Carpeta menu
+      {/* //Carpeta menu */}
         <Stack.Screen name="menu/menuCiudadano" options={{ headerShown: false }} />
         <Stack.Screen name="menu/formulario" options={{ headerShown: false }} />
         <Stack.Screen name="menu/asistente" options={{ headerShown: false }} />
@@ -33,8 +33,13 @@ export default function RootLayout() {
         <Stack.Screen name="menu/notificaciones" options={{ headerShown: false }} />
         <Stack.Screen name="menu/publicidadProducto" options={{ headerShown: false }} />
         <Stack.Screen name="menu/productoDetalle" options={{ headerShown: false }} />
+        <Stack.Screen name="menu/perfil" options={{ headerShown: false }} />  
 
-        
+        {/* Carpeta operador */}
+        <Stack.Screen name="operador/menuOperador" options={{ headerShown: false }} />
+        <Stack.Screen name="operador/horariosYzonas" options={{ headerShown: false }} />
+        <Stack.Screen name="operador/nuevoMantenimiento" options={{ headerShown: false }} />
+        <Stack.Screen name="operador/ubicacionOperador" options={{ headerShown: false }} />
 
         <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
       </Stack>
