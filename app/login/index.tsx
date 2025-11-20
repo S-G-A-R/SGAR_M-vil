@@ -16,18 +16,37 @@ import { Picker } from "@react-native-picker/picker";
 
 export default function IndexScreen() { 
   const router = useRouter();
+
   const [menuVisible, setMenuVisible] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedResiduo, setSelectedResiduo] = useState("");
   const [pickerVisible, setPickerVisible] = useState(false);
+
+  const [searchText, setSearchText] = useState("");
+  const [selectedOption, setSelectedOption] = useState(""); 
 
   const handleLoginOption = (rol: string) => {
     setMenuVisible(false);
     router.push(`/login/login?rol=${rol}`);
   };
 
+  // -------------------- BUSCADOR -----------------------
+  const handleSearch = () => {
+    if (selectedOption === "TIPO_DE_RESIDUO" && selectedResiduo) {
+      router.push(`/barra/list?residuo=${selectedResiduo}`);
+    } else if (selectedOption === "MAPA" && searchText) {
+      router.push(`/barra/mapa?busqueda=${searchText}`);
+    } else if (selectedOption === "TODO") {
+      router.push(`/barra/list?busqueda=${searchText}`);
+    } else {
+      alert("Por favor seleccione un filtro o escriba algo en la barra de búsqueda.");
+    }
+  };
+  // -------------------------------------------------------
+
   return (
     <ThemedView style={styles.container}>
+      {/* -------------------- HEADER (NO TOCADO) -------------------- */}
       <ThemedView style={styles.header}>
         <Image
           source={require("@/assets/images/sgar.jpg")}
@@ -56,8 +75,9 @@ export default function IndexScreen() {
           )}
         </View>
       </ThemedView>
+      {/* ------------------------------------------------------------ */}
 
-
+      {/* --------------------- BODY (NO TOCADO) ---------------------- */}
       <ThemedView style={styles.body}>
         
         <Image
@@ -81,7 +101,7 @@ export default function IndexScreen() {
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={[styles.aboutButton, styles.gameButton]} 
+          style={[styles.aboutButton, styles.gameButton]}
           onPress={() => router.push("/menu/menuCiudadano")}
         >
           <Text style={[styles.aboutText, styles.gameButtonText]}>
@@ -89,30 +109,50 @@ export default function IndexScreen() {
           </Text>
         </TouchableOpacity>
 
+        {/* --------------------- BUSCADOR ---------------------- */}
         <View style={styles.searchRow}>
           <Text style={styles.searchInput}>Consulta ambiental</Text>
 
-          <TouchableOpacity style={styles.searchIconButton}>
+          <TouchableOpacity
+            style={styles.searchIconButton}
+            onPress={handleSearch}
+          >
             <Text style={styles.searchIconText}>🔍</Text>
           </TouchableOpacity>
         </View>
 
         <View style={styles.optionsRow}>
-          <TouchableOpacity style={styles.optionBox}>
+          <TouchableOpacity
+            style={styles.optionBox}
+            onPress={() => {
+              setSelectedOption("TODO");
+              setPickerVisible(false);
+            }}
+          >
             <Text style={styles.optionText}>TODO</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.optionBox}>
+          <TouchableOpacity
+            style={styles.optionBox}
+            onPress={() => {
+              setSelectedOption("MAPA");
+              setPickerVisible(false);
+            }}
+          >
             <Text style={styles.optionText}>MAPA</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             style={styles.optionBox}
-            onPress={() => setPickerVisible(!pickerVisible)}
+            onPress={() => {
+              setSelectedOption("TIPO_DE_RESIDUO");
+              setPickerVisible(!pickerVisible);
+            }}
           >
             <Text style={styles.optionText}>TIPO DE RESIDUO</Text>
           </TouchableOpacity>
         </View>
+        {/* ------------------------------------------------------- */}
 
         {pickerVisible && (
           <View style={styles.pickerContainer}>
@@ -134,7 +174,7 @@ export default function IndexScreen() {
 
       </ThemedView>
 
-      {/* MODAL */}
+      {/* ------------------------ MODAL ------------------------- */}
       <Modal
         transparent={true}
         animationType="fade"
@@ -167,7 +207,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     paddingHorizontal: 16,
-    paddingTop: 30, 
+    paddingTop: 30,
     paddingBottom: 5,
     borderBottomWidth: 1,
     borderBottomColor: "#eee",
@@ -206,12 +246,13 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
 
-  bodyLogo: { 
-    width: 300, 
+  bodyLogo: {
+    width: 300,
     height: 200,
     marginTop: 35,
-    marginBottom: 20, 
-    borderRadius: 10 },
+    marginBottom: 20,
+    borderRadius: 10
+  },
 
   welcomeText: { fontSize: 24, fontWeight: "700", color: "#333", marginBottom: 5 },
 
@@ -239,10 +280,6 @@ const styles = StyleSheet.create({
   gameButton: { backgroundColor: "#2e7d32", marginBottom: 20 },
 
   gameButtonText: { color: "#fff", fontWeight: "600" },
-
-  navBar: { width: "100%", marginBottom: 10 },
-
-  navTitle: { fontSize: 18, fontWeight: "700", color: "#2e7d32" },
 
   searchRow: { flexDirection: "row", width: "100%", alignItems: "center", marginBottom: 15 },
 

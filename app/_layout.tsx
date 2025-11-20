@@ -43,7 +43,10 @@ export default function RootLayout() {
         <Stack.Screen name="asociado/productoDetalle" options={{ headerShown: false }} />
         <Stack.Screen name="asociado/productoEditar" options={{ headerShown: false }} />
 
-
+      //Carpeta barra
+        <Stack.Screen name="barra/list" options={{ headerShown: false }} />
+        <Stack.Screen name="barra/mapa" options={{ headerShown: false }} />
+        <Stack.Screen name="barra/detalles" options={{ headerShown: false }} />
 
 
         <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
