@@ -40,18 +40,6 @@ export default function MenuOperador() {
                         </View>
                     </TouchableOpacity>
 
-                    {/* Mantenimiento */}
-                    <TouchableOpacity
-                        style={styles.card}
-                        onPress={() => router.push("/operador/nuevoMantenimiento")}
-                    >
-                        <Ionicons name="build-outline" size={40} />
-                        <View>
-                            <Text style={styles.cardTitle}>Mantenimiento</Text>
-                            <Text style={styles.cardSubtitle}>Formularios y registros</Text>
-                        </View>
-                    </TouchableOpacity>
-
                 </View>
             </View>
         </View>
@@ -73,7 +61,7 @@ const styles = StyleSheet.create({
     },
 
     cardsContainer: {
-        width: "85%",
+        width: "55%",
         alignItems: "center",
     },
 
@@ -91,7 +79,7 @@ const styles = StyleSheet.create({
         padding: 20,
         borderRadius: 20,
         marginBottom: 18,
-        flexDirection: "row",
+        flexDirection: "column",
         alignItems: "center",
         gap: 16,
         shadowColor: "#000",
@@ -104,9 +92,11 @@ const styles = StyleSheet.create({
     cardTitle: {
         fontSize: 18,
         fontWeight: "600",
+        textAlign: "center",
     },
 
     cardSubtitle: {
         color: "#555",
+        textAlign: "center",
     },
 });
