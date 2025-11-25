@@ -1,6 +1,7 @@
 import { CredencialesRequest } from '../dtos/CredencialesRequest';
 
-const API_URL = 'https://gatewaysgar.onrender.com/ApiSeguridad/api/user/login';
+import { API_BASE_URL } from '../constants/api';
+const API_URL = API_BASE_URL + 'ApiSeguridad/api/user/login';
 
 export async function loginCiudadano(credenciales: CredencialesRequest): Promise<string | null> {
   try {
