@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Modal, Dimensions } from "react-native";
-import MapView, { Marker, Polyline } from "react-native-maps";
-import { Ionicons } from "@expo/vector-icons"; 
-import HeaderMenu from "@/components/HeaderMenu"; 
+import HeaderMenu from "@/components/HeaderMenu";
+import { Ionicons } from "@expo/vector-icons";
+import React, { useEffect, useState } from "react";
+import { Dimensions, Image, Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import MapView, { Marker } from "react-native-maps";
+import { useOperatorLocation } from "../../hooks/useOperatorLocation";
 
 const { height } = Dimensions.get("window");
 
@@ -28,6 +29,7 @@ export default function UbicacionScreen() {
   const [isFollowing, setIsFollowing] = useState(false); 
   const [truckLocation, setTruckLocation] = useState<LocationType>(initialRegion); 
   const [routeCoordinates, setRouteCoordinates] = useState<Coordinate[]>([]); 
+  const { locations } = useOperatorLocation();
   
   const [isReminderPickerOpen, setIsReminderPickerOpen] = useState(false);
 
@@ -151,26 +153,27 @@ export default function UbicacionScreen() {
             
             <View style={styles.mapContainer}>
               <MapView
-                style={styles.map} 
+                style={styles.map}
                 initialRegion={initialRegion}
-                region={truckLocation} 
-                showsUserLocation={true} 
+                showsUserLocation={true}
               >
-                <Marker
-                  coordinate={truckLocation}
-                  title="Camión de Recolección"
-                  description={isFollowing ? "En movimiento" : "En espera"}
-                >
-                   <Ionicons name="trash-bin" size={30} color="#67978dff" />
-                </Marker>
-                
-                {routeCoordinates.length > 1 && (
-                  <Polyline
-                    coordinates={routeCoordinates}
-                    strokeColor="#1E90FF" 
-                    strokeWidth={4}
-                  />
-                )}
+                {locations.map((loc) => (
+                  <Marker
+                    key={loc.idOperador}
+                    coordinate={{
+                      latitude: loc.location.coordinates[1],
+                      longitude: loc.location.coordinates[0],
+                    }}
+                    title={`Operador ${loc.idOperador}`}
+                    description={`Actualizado: ${loc.fechaActualizacion}`}
+                  >
+                    <Image
+                      source={require("../../assets/images/sgarlimp.png")}
+                      style={{ width: 40, height: 40 }}
+                      resizeMode="contain"
+                    />
+                  </Marker>
+                ))}
               </MapView>
 
               <TouchableOpacity style={styles.reminderButton} onPress={() => setIsReminderPickerOpen(true)}>

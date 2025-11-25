@@ -2,13 +2,14 @@ import HeaderMenu from "@/components/HeaderMenu";
 import * as Location from "expo-location";
 import { useState } from "react";
 import {
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  useWindowDimensions,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
+    useWindowDimensions,
 } from "react-native";
 import MapView, { Marker } from "react-native-maps";
+import { sendOperatorLocation } from "../../services/sendOperatorLocation";
 
 export default function UbicacionOperador() {
   const { width, height } = useWindowDimensions();
@@ -17,6 +18,10 @@ export default function UbicacionOperador() {
 
   const [location, setLocation] = useState<Location.LocationObjectCoords | null>(null);
   const [watcher, setWatcher] = useState<Location.LocationSubscription | null>(null);
+
+  // Ejemplo: idOperador y idHorario pueden venir del contexto de usuario/logueo
+  const idOperador = 500;
+  const idHorario = 200;
 
   const activarUbicacion = async () => {
     const { status } = await Location.requestForegroundPermissionsAsync();
@@ -31,7 +36,15 @@ export default function UbicacionOperador() {
         timeInterval: 2000,
         distanceInterval: 1,
       },
-      (loc) => setLocation(loc.coords)
+      (loc) => {
+        setLocation(loc.coords);
+        sendOperatorLocation({
+          idOperador,
+          idHorario,
+          lon: loc.coords.longitude,
+          lat: loc.coords.latitude,
+        });
+      }
     );
 
     setWatcher(subscription);

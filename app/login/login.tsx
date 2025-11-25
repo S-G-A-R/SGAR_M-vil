@@ -2,15 +2,17 @@ import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { Image } from "expo-image";
 import { useLocalSearchParams, useRouter } from "expo-router";
+import * as SecureStore from 'expo-secure-store';
 import { useState } from "react";
 import {
+  Dimensions,
+  KeyboardTypeOptions,
   Pressable,
   StyleSheet,
   TextInput,
   View,
-  KeyboardTypeOptions,
 } from "react-native";
-import { Dimensions } from 'react-native';
+import { useAuth } from "../../hooks/useAuth";
 
 const { height } = Dimensions.get('window');
 
@@ -23,29 +25,55 @@ export default function LoginScreen() {
 
   const [usuario, setUsuario] = useState("");
   const [contrasena, setContrasena] = useState("");
+  const { login, error } = useAuth();
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     if (!usuario || !contrasena) {
       alert("Por favor, completa todos los campos.");
       return;
     }
 
-    alert(`Inicio de sesión como ${rol || "usuario"} correcto ✅`);
+    await login(usuario, contrasena);
+    // Solo continuar si el login fue exitoso y no hay error
+    if (error) {
+      alert(error);
+      return;
+    }
 
-    // Redirección después del login
-    setTimeout(() => {
-      if (rol === "ciudadano") {
+    // Decodificar el token JWT solo si existe
+    const token = await SecureStore.getItemAsync('token');
+    if (!token) {
+      alert('Credenciales inválidas.');
+      return;
+    }
+    const base64Url = token.split('.')[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split('')
+        .map(function(c) {
+          return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        })
+        .join('')
+    );
+    const payload = JSON.parse(jsonPayload);
+    if (rol === 'ciudadano' && payload.role === 'Ciudadano') {
+      alert("Inicio de sesión como ciudadano correcto ✅");
+      setTimeout(() => {
         router.push("/menu/menuCiudadano");
-      } else if (rol === "operador") {
-        router.push("/operador/menuOperador"); //cambiar ruta para operador
-      } else if (rol === "asociado") {
-        router.push("/asociado/menuAsociado"); //cambiar ruta para asociado
-      } else if (rol === "organizacion") {
-        router.push("/menu/menuCiudadano"); //cambiar ruta para organización
-      } else if (rol === "administrador") {
-        router.push("/menu/menuCiudadano"); //cambiar ruta para admin
-      }
-    }, 500);
+      }, 500);
+      return;
+    } else if (rol === 'operador' && payload.role === 'Operador') {
+      alert("Inicio de sesión como operador correcto ✅");
+      setTimeout(() => {
+        router.push("/operador/menuOperador");
+      }, 500);
+      return;
+    } else {
+      alert("Credenciales inválidas.");
+      return;
+    }
+
   };
 
   const tituloRol =
@@ -107,6 +135,9 @@ export default function LoginScreen() {
           <Pressable style={styles.button} onPress={handleLogin}>
             <ThemedText style={styles.buttonText}>Aceptar</ThemedText>
           </Pressable>
+          {error && rol === "ciudadano" && (
+            <ThemedText style={{ color: 'red', textAlign: 'center', marginTop: 10 }}>{error}</ThemedText>
+          )}
 
           {rol === "ciudadano" && (
             <View style={styles.registerContainer}>
