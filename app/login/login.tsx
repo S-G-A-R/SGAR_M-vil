@@ -2,7 +2,7 @@ import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { Image } from "expo-image";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import * as SecureStore from 'expo-secure-store';
+import * as SecureStore from "expo-secure-store";
 import { useState } from "react";
 import {
   Dimensions,
@@ -14,10 +14,9 @@ import {
 } from "react-native";
 import { useAuth } from "../../hooks/useAuth";
 
-const { height } = Dimensions.get('window');
+const { height } = Dimensions.get("window");
 
 const dynamicPadding = height * 0.16;
-
 
 export default function LoginScreen() {
   const router = useRouter();
@@ -41,29 +40,28 @@ export default function LoginScreen() {
     }
 
     // Decodificar el token JWT solo si existe
-    const token = await SecureStore.getItemAsync('token');
+    const token = await SecureStore.getItemAsync("token");
     if (!token) {
-      alert('Credenciales inválidas.');
       return;
     }
-    const base64Url = token.split('.')[1];
-    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const base64Url = token.split(".")[1];
+    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
     const jsonPayload = decodeURIComponent(
       atob(base64)
-        .split('')
-        .map(function(c) {
-          return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        .split("")
+        .map(function (c) {
+          return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
         })
-        .join('')
+        .join("")
     );
     const payload = JSON.parse(jsonPayload);
-    if (rol === 'ciudadano' && payload.role === 'Ciudadano') {
+    if (rol === "ciudadano" && payload.role === "Ciudadano") {
       alert("Inicio de sesión como ciudadano correcto ✅");
       setTimeout(() => {
         router.push("/menu/menuCiudadano");
       }, 500);
       return;
-    } else if (rol === 'operador' && payload.role === 'Operador') {
+    } else if (rol === "operador" && payload.role === "Operador") {
       alert("Inicio de sesión como operador correcto ✅");
       setTimeout(() => {
         router.push("/operador/menuOperador");
@@ -73,7 +71,6 @@ export default function LoginScreen() {
       alert("Credenciales inválidas.");
       return;
     }
-
   };
 
   const tituloRol =
@@ -91,14 +88,14 @@ export default function LoginScreen() {
 
   const labelUsuario = "Correo Electrónico *";
   const keyboardTypeUsuario: KeyboardTypeOptions = "email-address";
-  
+
   let placeholderUsuario = "";
   if (rol === "ciudadano") {
     placeholderUsuario = "Ingrese su correo electrónico";
   } else {
     placeholderUsuario = "Ingrese su correo laboral";
   }
-  
+
   return (
     <ThemedView style={styles.container}>
       <View style={styles.body}>
@@ -114,7 +111,7 @@ export default function LoginScreen() {
           <ThemedText style={styles.label}>{labelUsuario}</ThemedText>
           <TextInput
             style={styles.input}
-            placeholder={placeholderUsuario} 
+            placeholder={placeholderUsuario}
             placeholderTextColor="#333"
             value={usuario}
             onChangeText={setUsuario}
@@ -136,7 +133,11 @@ export default function LoginScreen() {
             <ThemedText style={styles.buttonText}>Aceptar</ThemedText>
           </Pressable>
           {error && rol === "ciudadano" && (
-            <ThemedText style={{ color: 'red', textAlign: 'center', marginTop: 10 }}>{error}</ThemedText>
+            <ThemedText
+              style={{ color: "red", textAlign: "center", marginTop: 10 }}
+            >
+              {error}
+            </ThemedText>
           )}
 
           {rol === "ciudadano" && (
@@ -168,8 +169,7 @@ export default function LoginScreen() {
               <ThemedText style={styles.smallText}>
                 ¿No tienes una cuenta?
               </ThemedText>
-              <Pressable
-              >
+              <Pressable>
                 <ThemedText type="link"> Crear Perfil Organizacion</ThemedText>
               </Pressable>
             </View>
@@ -184,17 +184,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-   
-    
   },
-  
+
   body: {
     flex: 1,
-    justifyContent: "flex-start", 
+    justifyContent: "flex-start",
     alignItems: "center",
     paddingHorizontal: 20,
     paddingTop: dynamicPadding,
-    
   },
   logo: {
     width: 200,
