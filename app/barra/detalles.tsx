@@ -1,48 +1,114 @@
+// app/barra/detalles.tsx
 import React, { useEffect, useState } from "react";
-import { View, Text } from "react-native";
+import { View, Text, ActivityIndicator } from "react-native";
 import { useLocalSearchParams } from "expo-router";
 import organizacionesService from "@/services/organizacionesService";
 
 export default function DetallesOrganizacion() {
   const { id } = useLocalSearchParams();
   const [org, setOrg] = useState<any>(null);
+  const [cargando, setCargando] = useState(true);
 
   useEffect(() => {
     if (id) {
-      organizacionesService
-        .obtenerDetallesOrganizacion(String(id))
-        .then(setOrg);
+      (async () => {
+        try {
+          const data = await organizacionesService.obtenerDetallesOrganizacion(
+            String(id)
+          );
+          setOrg(data);
+        } catch (e) {
+          console.log("Error cargando detalles", e);
+        } finally {
+          setCargando(false);
+        }
+      })();
     }
   }, [id]);
 
-  if (!org) return <Text>Cargando...</Text>;
+  if (cargando)
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <ActivityIndicator size="large" />
+        <Text style={{ marginTop: 10 }}>Cargando detalles...</Text>
+      </View>
+    );
+
+  if (!org) return <Text>No se encontró la organización.</Text>;
 
   return (
     <View style={{ padding: 20 }}>
-      <Text style={{ fontSize: 22, fontWeight: "bold" }}>
+      <Text
+        style={{
+          fontSize: 26,
+          fontWeight: "bold",
+          color: "#2c3e50",
+          marginBottom: 10,
+        }}
+      >
         {org.nombreOrganizacion}
       </Text>
-      <Text style={{ marginTop: 10 }}>Teléfono: {org.telefono}</Text>
-      <Text>Email: {org.email}</Text>
 
+      {/* Info base */}
+      <View
+        style={{
+          backgroundColor: "white",
+          padding: 15,
+          borderRadius: 12,
+          shadowColor: "#000",
+          shadowOpacity: 0.1,
+          shadowRadius: 6,
+          elevation: 2,
+          marginBottom: 15,
+        }}
+      >
+        <Text style={{ fontSize: 16 }}>
+          📞 Teléfono: <Text style={{ fontWeight: "600" }}>{org.telefono}</Text>
+        </Text>
+        <Text style={{ fontSize: 16, marginTop: 6 }}>
+          📧 Email: <Text style={{ fontWeight: "600" }}>{org.email}</Text>
+        </Text>
+      </View>
+
+      {/* Ubicación */}
       {org.ubicacion && (
-        <>
-          <Text style={{ marginTop: 20, fontWeight: "bold" }}>Ubicación</Text>
+        <View
+          style={{
+            backgroundColor: "#ecf0f1",
+            padding: 15,
+            borderRadius: 12,
+            marginBottom: 15,
+          }}
+        >
+          <Text style={{ fontWeight: "bold", marginBottom: 5 }}>
+            🗺 Ubicación
+          </Text>
           <Text>Latitud: {org.ubicacion.latitud}</Text>
           <Text>Longitud: {org.ubicacion.longitud}</Text>
           <Text>
             Horario: {org.ubicacion.horaApertura} - {org.ubicacion.horaCierre}
           </Text>
-        </>
+        </View>
       )}
 
-      <Text style={{ marginTop: 20, fontWeight: "bold" }}>
-        Tipos de residuo
-      </Text>
-
-      {org.tiposResiduo?.map((t: any) => (
-        <Text key={t.id}>• {t.nombre}</Text>
-      ))}
+      {/* Tipos de residuo */}
+      {org.tiposResiduo && (
+        <View
+          style={{
+            backgroundColor: "#dfe6e9",
+            padding: 15,
+            borderRadius: 12,
+            marginBottom: 20,
+          }}
+        >
+          <Text style={{ fontWeight: "bold", marginBottom: 6 }}>
+            ♻ Tipos de residuo que maneja
+          </Text>
+          {org.tiposResiduo.map((t: any) => (
+            <Text key={t.id}>• {t.nombre}</Text>
+          ))}
+        </View>
+      )}
     </View>
   );
 }
