@@ -21,6 +21,7 @@ export default function RootLayout() {
         <Stack.Screen name="login/registro-asociado" options={{ headerShown: false }} />
         <Stack.Screen name="login/registro-organizacion" options={{ headerShown: false }} />
         <Stack.Screen name="login/registro" options={{ headerShown: false }} />
+        <Stack.Screen name="login/reciclarScreen" options={{ headerShown: false }} />
       
       {/* //Carpeta menu ciudadano */}
         <Stack.Screen name="menu/menuCiudadano" options={{ headerShown: false }} />

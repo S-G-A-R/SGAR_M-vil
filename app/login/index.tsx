@@ -14,7 +14,7 @@ import {
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 
-export default function IndexScreen() { 
+export default function IndexScreen() {
   const router = useRouter();
 
   const [menuVisible, setMenuVisible] = useState(false);
@@ -23,7 +23,7 @@ export default function IndexScreen() {
   const [pickerVisible, setPickerVisible] = useState(false);
 
   const [searchText, setSearchText] = useState("");
-  const [selectedOption, setSelectedOption] = useState(""); 
+  const [selectedOption, setSelectedOption] = useState("");
 
   const handleLoginOption = (rol: string) => {
     setMenuVisible(false);
@@ -39,7 +39,9 @@ export default function IndexScreen() {
     } else if (selectedOption === "TODO") {
       router.push(`/barra/list?busqueda=${searchText}`);
     } else {
-      alert("Por favor seleccione un filtro o escriba algo en la barra de búsqueda.");
+      alert(
+        "Por favor seleccione un filtro o escriba algo en la barra de búsqueda."
+      );
     }
   };
   // -------------------------------------------------------
@@ -50,7 +52,7 @@ export default function IndexScreen() {
       <ThemedView style={styles.header}>
         <Image
           source={require("@/assets/images/sgar.jpg")}
-          style={styles.headerLogo} 
+          style={styles.headerLogo}
         />
 
         <View style={styles.dropdownContainer}>
@@ -62,7 +64,7 @@ export default function IndexScreen() {
 
           {menuVisible && (
             <View style={styles.dropdownMenu}>
-              {["Ciudadano","Asociado","Operador"].map((rol) => (
+              {["Ciudadano", "Asociado", "Operador"].map((rol) => (
                 <Pressable
                   key={rol}
                   style={styles.dropdownItem}
@@ -79,7 +81,6 @@ export default function IndexScreen() {
 
       {/* --------------------- BODY (NO TOCADO) ---------------------- */}
       <ThemedView style={styles.body}>
-        
         <Image
           source={require("@/assets/images/sgar.jpeg")}
           style={styles.bodyLogo}
@@ -102,7 +103,7 @@ export default function IndexScreen() {
 
         <TouchableOpacity
           style={[styles.aboutButton, styles.gameButton]}
-          onPress={() => router.push("/menu/menuCiudadano")}
+          onPress={() => router.push("/login/reciclarScreen")}
         >
           <Text style={[styles.aboutText, styles.gameButtonText]}>
             ♻️ Jugar a Reciclar
@@ -171,7 +172,6 @@ export default function IndexScreen() {
             </Picker>
           </View>
         )}
-
       </ThemedView>
 
       {/* ------------------------ MODAL ------------------------- */}
@@ -251,10 +251,15 @@ const styles = StyleSheet.create({
     height: 200,
     marginTop: 35,
     marginBottom: 20,
-    borderRadius: 10
+    borderRadius: 10,
   },
 
-  welcomeText: { fontSize: 24, fontWeight: "700", color: "#333", marginBottom: 5 },
+  welcomeText: {
+    fontSize: 24,
+    fontWeight: "700",
+    color: "#333",
+    marginBottom: 5,
+  },
 
   descriptionText: {
     fontSize: 16,
@@ -281,7 +286,12 @@ const styles = StyleSheet.create({
 
   gameButtonText: { color: "#fff", fontWeight: "600" },
 
-  searchRow: { flexDirection: "row", width: "100%", alignItems: "center", marginBottom: 15 },
+  searchRow: {
+    flexDirection: "row",
+    width: "100%",
+    alignItems: "center",
+    marginBottom: 15,
+  },
 
   searchInput: {
     flex: 1,
@@ -293,11 +303,21 @@ const styles = StyleSheet.create({
     color: "#555",
   },
 
-  searchIconButton: { marginLeft: 10, backgroundColor: "#2e7d32", padding: 10, borderRadius: 8 },
+  searchIconButton: {
+    marginLeft: 10,
+    backgroundColor: "#2e7d32",
+    padding: 10,
+    borderRadius: 8,
+  },
 
   searchIconText: { color: "#fff", fontSize: 20 },
 
-  optionsRow: { flexDirection: "row", justifyContent: "space-between", width: "100%", marginTop: 5 },
+  optionsRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
+    marginTop: 5,
+  },
 
   optionBox: {
     flex: 1,
@@ -310,17 +330,44 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
 
-  optionText: { textAlign: "center", fontSize: 14, color: "#444", fontWeight: "600" },
+  optionText: {
+    textAlign: "center",
+    fontSize: 14,
+    color: "#444",
+    fontWeight: "600",
+  },
 
-  pickerContainer: { width: "100%", marginTop: 10, borderRadius: 8, overflow: "hidden" },
+  pickerContainer: {
+    width: "100%",
+    marginTop: 10,
+    borderRadius: 8,
+    overflow: "hidden",
+  },
 
   picker: { backgroundColor: "#fff" },
 
-  overlay: { flex: 1, backgroundColor: "rgba(0,0,0,0.4)", justifyContent: "center", alignItems: "center" },
+  overlay: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.4)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
 
-  modalBox: { width: 300, backgroundColor: "#fff", borderRadius: 15, padding: 20, alignItems: "center", elevation: 10 },
+  modalBox: {
+    width: 300,
+    backgroundColor: "#fff",
+    borderRadius: 15,
+    padding: 20,
+    alignItems: "center",
+    elevation: 10,
+  },
 
-  modalTitle: { fontSize: 20, fontWeight: "500", marginBottom: 10, color: "#2e5d52" },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: "500",
+    marginBottom: 10,
+    color: "#2e5d52",
+  },
 
   modalContent: { fontSize: 20, textAlign: "center", color: "#444" },
 });
