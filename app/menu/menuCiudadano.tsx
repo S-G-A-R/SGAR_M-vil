@@ -1,19 +1,20 @@
+import HeaderMenu from "@/components/HeaderMenu";
 import {
   Ionicons,
   MaterialCommunityIcons,
   MaterialIcons,
 } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
 import React from "react";
 import {
+  Dimensions,
+  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
-  ScrollView,
+  View
 } from "react-native";
-import HeaderMenu from "@/components/HeaderMenu";
-import { useRouter } from "expo-router";
-import { Dimensions } from "react-native";
+
 const { width, height } = Dimensions.get("window");
 
 
@@ -38,7 +39,7 @@ export default function MenuCiudadanoScreen() {
 
           <TouchableOpacity
             style={styles.card}
-            onPress={() => router.push("/menu/notificaciones")} 
+            onPress={() => router.push("/barra/list")} 
           >
             <Ionicons name="notifications" size={34} color="#000" />
             <Text style={styles.cardText}>Notificaciones</Text>

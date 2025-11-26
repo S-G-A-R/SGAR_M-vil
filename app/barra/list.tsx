@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
-import { View, Text, TouchableOpacity, ActivityIndicator } from "react-native";
-import { useRouter, useLocalSearchParams } from "expo-router";
 import organizacionesService from "@/services/organizacionesService";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import React, { useEffect, useState } from "react";
+import { ActivityIndicator, Text, TouchableOpacity, View } from "react-native";
 
 type Organizacion = {
   id: number;
@@ -38,7 +38,12 @@ export default function ListOrganizaciones() {
         if (tipo) {
           const idTipo = mapaTipos[tipo.toLowerCase()];
           if (idTipo) {
-            data = await organizacionesService.obtenerOrganizacionesPorTipo(idTipo);
+            let idsOrganizaciones: number[] = [];
+            idsOrganizaciones = await organizacionesService.obtenerOrganizacionesPorTipo(idTipo);
+            for (const orgId of idsOrganizaciones) {
+              const orgDetalles = await organizacionesService.obtenerDetallesOrganizacion(orgId);
+              data.push(orgDetalles);
+            }
           }
         } else {
           data = await organizacionesService.obtenerOrganizaciones();

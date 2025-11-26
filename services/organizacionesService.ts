@@ -2,8 +2,7 @@ import { API_BASE_URL } from "@/constants/api";
 
 const API_SEG = `${API_BASE_URL}ApiSeguridad/api`;
 const API_NAV = `${API_BASE_URL}ApiNavegacion`;
-const API_ADMI = `${API_BASE_URL}ApiAdmi`;
-const API_ORG = `${API_BASE_URL}ApiOrganizacion`;
+const API_ADMI = `${API_BASE_URL}ApiAdmi/api`;
 
 const organizacionesService = {
   // Api admin - tipos de residuo
@@ -14,8 +13,9 @@ const organizacionesService = {
   // Api organizacion - organizaciones por tipo de residuo
   async obtenerOrganizacionesPorTipo(idTipo: number) {
     const res = await fetch(
-      `${API_ORG}/organizacion-tipo-basura/orgs/${idTipo}`
+      `${API_ADMI}/organizacion-tipo-basura/orgs/${idTipo}`
     );
+  
     return await res.json();
   },
 
@@ -26,7 +26,7 @@ const organizacionesService = {
   },
 
    // Api seguridad - detalles de una organizacion
-  async obtenerDetallesOrganizacion(id: string) {
+  async obtenerDetallesOrganizacion(id: number) {
     //Datos base (Seguridad)
     const orgRes = await fetch(`${API_SEG}/organization/${id}`);
     const orgData = await orgRes.json();
