@@ -1,16 +1,15 @@
-import React from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  SafeAreaView,
-  Dimensions,
-  TouchableOpacity,
-  Image,
-} from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import HeaderMenu from '@/components/HeaderMenu'; 
+import { API_NAV } from "@/constants/api";
 import { useNavigation } from '@react-navigation/native';
+import * as Location from "expo-location";
+import React, { useEffect, useState } from 'react';
+import {
+  Dimensions,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  View
+} from 'react-native';
+import MapView, { Callout, Marker } from "react-native-maps";
 
 const { width, height } = Dimensions.get('window');
 const CARD_WIDTH = Math.min(400, width - 40);
@@ -23,219 +22,187 @@ const COLOR_GRIS_TARJETA = '#e0e0e0';
 const COLOR_GRIS_MAPA = '#c4c4c4';
 const COLOR_GRIS_TEXTO = '#333333';
 
+interface LocationData {
+  _id: string;
+  location: {
+    coordinates: [number, number];
+    type: string;
+  };
+  descripcion: string;
+  horaApertura: string;
+  horaCierre: string;
+}
+
 export default function RadarCompactScreen() {
   const navigation = useNavigation<any>();
   const handleNavigateToList = () => navigation.navigate('menu/puntos-recoleccion');
 
+  const [locations, setLocations] = useState<LocationData[]>([]);
+  const [userLocation, setUserLocation] = useState<{ latitude: number; longitude: number } | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [selectedOrganization, setSelectedOrganization] = useState<string | null>(null);
+
+  const fetchLocations = async () => {
+    try {
+      const response = await fetch(`${API_NAV}/collection-locations/`);
+      const data: LocationData[] = await response.json();
+      setLocations(data);
+    } catch (error) {
+      console.error("Error fetching locations:", error);
+    }
+  };
+
+  const fetchUserLocation = async () => {
+    const { status } = await Location.requestForegroundPermissionsAsync();
+    if (status !== "granted") {
+      console.error("Permission to access location was denied");
+      return;
+    }
+
+    const location = await Location.getCurrentPositionAsync({});
+    setUserLocation({
+      latitude: location.coords.latitude,
+      longitude: location.coords.longitude,
+    });
+  };
+
+  useEffect(() => {
+    const initialize = async () => {
+      setLoading(true);
+      await fetchLocations();
+      await fetchUserLocation();
+      setLoading(false);
+    };
+
+    initialize();
+  }, []);
+
   return (
     <SafeAreaView style={styles.safe}>
-      <HeaderMenu /> 
-
-      <View style={styles.headerButtonContainer}>
-        <TouchableOpacity style={styles.smallPuntosButton} onPress={handleNavigateToList}>
-          <Text style={styles.smallPuntosText}>Mis puntos de recolección</Text>
-          <Ionicons name="chevron-forward" size={16} color={COLOR_GRIS_TEXTO} />
-        </TouchableOpacity>
-      </View>
-
-      <View style={styles.page}>
-        <View style={styles.card}>
-          <View style={styles.headerBox}>
-            <View style={styles.logoContainer}>
-              <Image
-                source={require("@/assets/images/mapacheN.jpeg")}
-                style={styles.logo}
-                resizeMode="contain"
-              />
-            </View>
-            <Text style={styles.title}>Recolección{"\n"}SGAR</Text>
-          </View>
-
-          <View style={styles.mapStrip}>
-            <View style={styles.mapInner}>
-              <View style={[styles.mapLineHorizontal, { top: '30%', left: '10%', width: '80%' }]} />
-              <View style={[styles.mapLineVertical, { top: '10%', left: '50%', height: '80%' }]} />
-              <View style={[styles.mapLineDiagonal, { transform: [{ rotate: '40deg' }] }]} />
-
-              <View style={[styles.marker, { left: '18%', top: '25%' }]}>
-                <Ionicons name="leaf-outline" size={20} color={COLOR_GRIS_TEXTO} /> 
-              </View>
-
-              <View style={[styles.marker, styles.markerLocation]}>
-                <Ionicons name="location-sharp" size={24} color={COLOR_GRIS_TEXTO} />
-                <Text style={styles.ubicacionText}>Tu ubicación</Text>
-              </View>
-
-              <View style={[styles.marker, { right: '15%', top: '30%' }]}>
-                <Ionicons name="trash-bin-outline" size={20} color={COLOR_GRIS_TEXTO} />
-              </View>
-              
-            </View>
-
-            
-            <TouchableOpacity style={styles.searchRow} onPress={handleNavigateToList}>
-              <Ionicons name="search" size={18} color={COLOR_BLANCO} />
-              <Text style={styles.searchText}>Buscar puntos cercanos</Text>
-            </TouchableOpacity>
-          </View>
+      {selectedOrganization && (
+        <View style={styles.labelContainer}>
+          <Text style={styles.labelText}>Organización: {selectedOrganization}</Text>
         </View>
+      )}
+
+      <View style={styles.mapWrapper}>
+        {loading ? (
+          <Text style={styles.loadingText}>Cargando mapa...</Text>
+        ) : (
+          <MapView
+            style={styles.map}
+            initialRegion={{
+              latitude: userLocation?.latitude || 13.588273768651174,
+              longitude: userLocation?.longitude || -89.2884625581808,
+              latitudeDelta: 0.1,
+              longitudeDelta: 0.1,
+            }}
+          >
+            {userLocation && (
+              <Marker
+                coordinate={userLocation}
+                title="Tu ubicación"
+                pinColor="blue"
+              />
+            )}
+
+            {locations.map((location) => (
+              <Marker
+                key={location._id}
+                coordinate={{
+                  latitude: location.location.coordinates[1],
+                  longitude: location.location.coordinates[0],
+                }}
+                title={location.descripcion}
+                onPress={() => setSelectedOrganization(location.descripcion)}
+              >
+                <Callout>
+                  <View style={styles.calloutContainer}>
+                    <Text style={styles.calloutTitle}>{location.descripcion}</Text>
+                    <Text style={styles.calloutText}>Horario: {location.horaApertura} - {location.horaCierre}</Text>
+                  </View>
+                </Callout>
+              </Marker>
+            ))}
+          </MapView>
+        )}
       </View>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: COLOR_GRIS_FONDO },
+  safe: { flex: 1, backgroundColor: "#fff" },
 
-  headerButtonContainer: {
-   position: 'absolute',
-    top: 90, 
-    right: 15,
-    zIndex: 10,
-    paddingBottom: 5,
-  },
-  
-  page: {
-    flex: 1,
-    alignItems: 'center',
-    
-    paddingTop: 36, 
-  },
-
-  smallPuntosButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: COLOR_BLANCO,
-    borderColor: '#ccc',
-    borderWidth: 1,
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-    borderRadius: 5,
-    shadowColor: '#000',
-    shadowOffset: { width: 1, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-    elevation: 2,
-  },
-  smallPuntosText: { color: COLOR_GRIS_TEXTO, marginRight: 4, fontSize: 13, fontWeight: '400' },
-
-  
-  card: {
-    width: CARD_WIDTH,
-    height: CARD_HEIGHT,
-    backgroundColor: COLOR_GRIS_TARJETA,
-    borderRadius: 0,
-    overflow: 'hidden',
-    marginTop: 15,
-    shadowColor: '#000',
+  labelContainer: {
+    position: "absolute",
+    top: 20,
+    left: 20,
+    right: 20,
+    backgroundColor: "#fff",
+    padding: 10,
+    borderRadius: 8,
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
+    shadowOpacity: 0.2,
     shadowRadius: 4,
-    elevation: 3,
-  },
-
-  
-  headerBox: {
-    backgroundColor: COLOR_NEGRO_PRINCIPAL,
-    alignItems: 'center',
-    paddingVertical: 35,
-  },
-
-  logoContainer: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    backgroundColor: 'rgba(255,255,255,0.1)',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 10,
-  },
-  logo: { width: 90, height: 68,},
-  title: { color: COLOR_BLANCO, fontSize: 22, fontWeight: '700', textAlign: 'center' },
-
-  
-  mapStrip: {
-    flex: 1,
-    backgroundColor: COLOR_BLANCO,
-    position: 'relative',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-
-  mapInner: {
-    width: '100%',
-    height: '100%',
-    position: 'relative',
-    backgroundColor: COLOR_GRIS_TARJETA,
-    alignItems: 'center',
-  },
-
-  mapLineHorizontal: {
-    position: 'absolute',
-    backgroundColor: COLOR_GRIS_MAPA,
-    height: 3,
-  },
-  mapLineVertical: {
-    position: 'absolute',
-    backgroundColor: COLOR_GRIS_MAPA,
-    width: 3,
-  },
-  mapLineDiagonal: {
-    position: 'absolute',
-    width: '100%',
-    height: 3,
-    backgroundColor: COLOR_GRIS_MAPA,
-    top: '55%',
-  },
-
-  marker: {
-    position: 'absolute',
-    padding: 8,
-    borderRadius: 25,
-    backgroundColor: COLOR_BLANCO,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.15,
-    shadowRadius: 2,
-    elevation: 2,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  
-  markerLocation: {
-    padding: 0,
-    width: 35,
-    height: 35,
-    borderRadius: 18,
-    backgroundColor: COLOR_GRIS_TARJETA,
-    top: '40%',
-    left: '48%',
-  },
-
-  ubicacionText: {
-    position: 'absolute',
-    bottom: -20,
-    fontSize: 14,
-    color: COLOR_GRIS_TEXTO,
-    fontWeight: 'bold',
-    backgroundColor: 'transparent',
-  },
-
-  searchRow: {
-    position: 'absolute',
-    bottom: 25,
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: COLOR_NEGRO_PRINCIPAL,
-    paddingHorizontal: 20,
-    paddingVertical: 12,
-    borderRadius: 25,
     elevation: 5,
   },
-  searchText: {
-    color: COLOR_BLANCO,
-    fontSize: 15,
-    marginLeft: 8,
-    fontWeight: '600',
+
+  labelText: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#333",
+    textAlign: "center",
+  },
+
+  mapWrapper: {
+    flex: 1,
+    margin: 20,
+    borderRadius: 15,
+    overflow: "hidden",
+    borderWidth: 1,
+    borderColor: "#ccc",
+    backgroundColor: "#f9f9f9",
+    elevation: 3,
+    height: "70%", // Reduce el tamaño del mapa
+  },
+
+  map: {
+    width: "100%",
+    height: "100%",
+  },
+
+  loadingText: {
+    textAlign: "center",
+    fontSize: 16,
+    color: "#666",
+  },
+
+  calloutContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 10,
+    backgroundColor: "#fff",
+    borderRadius: 8,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+
+  calloutTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#333",
+    marginBottom: 5,
+    textAlign: "center",
+  },
+
+  calloutText: {
+    fontSize: 14,
+    color: "#666",
+    textAlign: "center",
   },
 });

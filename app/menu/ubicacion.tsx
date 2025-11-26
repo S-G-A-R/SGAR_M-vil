@@ -17,7 +17,7 @@ type LocationType = {
 
 const initialRegion: LocationType = {
   latitude: 13.7942,   
-  longitude: -88.8965, // Coordenadas de ejemplo (luego cambiar por la api real)
+  longitude: -88.8965,
   latitudeDelta: 0.0922,
   longitudeDelta: 0.0421,
 };
