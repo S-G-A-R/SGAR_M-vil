@@ -14,21 +14,20 @@
     "android": {
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE"
-
       },
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "package": "com.anonymous.sgar01"
     },
     "web": {
       "output": "static"
-      
     },
     "plugins": [
       "expo-router",
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/splash-icon.png",
+          "image": "./assets/images/splashimg.jpeg",
           "imageWidth": 200,
           "resizeMode": "contain",
           "backgroundColor": "#ffffff",
@@ -41,6 +40,12 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "c481fbc0-5fba-4438-98ce-e73df57d775c"
+      }
     }
   }
 }

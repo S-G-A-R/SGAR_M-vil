@@ -45,7 +45,7 @@ export default function HeaderMenu() {
           </TouchableOpacity>
 
           <Image
-            source={require("@/assets/images/sgar.jpg")}
+            source={require("@/assets/images/sgarlogo.jpg")}
             style={styles.logo}
           />
         </View>

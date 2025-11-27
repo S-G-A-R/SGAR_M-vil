@@ -3,18 +3,19 @@ import { ThemedView } from "@/components/themed-view";
 import { Image } from "expo-image";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
-import { ScrollView } from "react-native";
-
-import { API_NAV } from "@/constants/api";
-import { Picker } from "@react-native-picker/picker";
 import {
   Modal,
   Pressable,
+  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
+
+import { API_NAV } from "@/constants/api";
+import { Picker } from "@react-native-picker/picker";
+
 
 interface Location {
   _id: string;
@@ -84,7 +85,7 @@ export default function IndexScreen() {
         {/* -------------------- HEADER -------------------- */}
         <ThemedView style={styles.header}>
           <Image
-            source={require("@/assets/images/sgar.jpg")}
+            source={require("@/assets/images/sgarlogo.jpg")}
             style={styles.headerLogo}
           />
 
