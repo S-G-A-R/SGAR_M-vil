@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, TextInput, Image, FlatList, TouchableWithoutFeedback, ImageSourcePropType } from 'react-native';
+import HeaderMenu from '@/components/HeaderMenu';
 import { Ionicons } from '@expo/vector-icons';
-import HeaderMenu from '@/components/HeaderMenu'; 
-import { useNavigation, NavigationProp, ParamListBase } from '@react-navigation/native'; 
+import { NavigationProp, ParamListBase, useNavigation } from '@react-navigation/native';
+import React, { useState } from 'react';
+import { FlatList, Image, ImageSourcePropType, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 
 interface Product {
     id: string;
@@ -24,11 +24,36 @@ const COLOR_BUSCAR_BOTON = '#007bff';
 const COLOR_MENU_BOTON = '#1e90ff'; 
 
 const mockProducts: Product[] = [
-    { id: '1', name: 'Cepillo Ecológico', price: 50.00, imageUrl: require("../../assets/images/producto1.jpg") }, 
-    { id: '2', name: 'Detergente Bio', price: 75.50, imageUrl: require("../../assets/images/producto2.png") }, 
-    { id: '3', name: 'Guantes Reciclados', price: 40.00, imageUrl: require("../../assets/images/producto3.png") }, 
-    { id: '4', name: 'Desinfectante Floral', price: 60.00, imageUrl: require("../../assets/images/producto4.jpg") }, 
-    { id: '5', name: 'Esponja de Fibra', price: 20.00, imageUrl: require("../../assets/images/producto5.jpg") }, 
+  {
+    id: "1",
+    name: "Cepillo Ecológico",
+    price: 50.0,
+    imageUrl: require("../../assets/images/producto1.jpg"),
+  },
+  {
+    id: "2",
+    name: "Detergente Bio",
+    price: 75.5,
+    imageUrl: require("../../assets/images/producto2.jpg"),
+  },
+  {
+    id: "3",
+    name: "Guantes Reciclados",
+    price: 40.0,
+    imageUrl: require("../../assets/images/producto3.jpg"),
+  },
+  {
+    id: "4",
+    name: "Desinfectante Floral",
+    price: 60.0,
+    imageUrl: require("../../assets/images/producto4.jpg"),
+  },
+  {
+    id: "5",
+    name: "Esponja de Fibra",
+    price: 20.0,
+    imageUrl: require("../../assets/images/producto5.jpg"),
+  },
 ];
 
 

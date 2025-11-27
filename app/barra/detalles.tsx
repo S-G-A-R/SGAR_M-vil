@@ -1,8 +1,8 @@
 // app/barra/detalles.tsx
-import React, { useEffect, useState } from "react";
-import { View, Text, ActivityIndicator } from "react-native";
-import { useLocalSearchParams } from "expo-router";
 import organizacionesService from "@/services/organizacionesService";
+import { useLocalSearchParams } from "expo-router";
+import React, { useEffect, useState } from "react";
+import { ActivityIndicator, Text, View } from "react-native";
 
 export default function DetallesOrganizacion() {
   const { id } = useLocalSearchParams();
@@ -14,7 +14,7 @@ export default function DetallesOrganizacion() {
       (async () => {
         try {
           const data = await organizacionesService.obtenerDetallesOrganizacion(
-            String(id)
+            Number(id)
           );
           setOrg(data);
         } catch (e) {
