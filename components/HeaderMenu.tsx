@@ -112,7 +112,7 @@ export default function HeaderMenu() {
             style={styles.logoutButton}
             onPress={() => {
               toggleMenu();
-              router.replace("/login");
+              router.replace("/");
             }}
           >
             <Ionicons name="log-out-outline" size={20} color="#d9534f" />
