@@ -16,7 +16,7 @@ export default function RootLayout() {
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <Stack>
         {/* //Carpeta login */}
-        <Stack.Screen name="login/index" options={{ headerShown: false }} />
+        
         <Stack.Screen name="login/login" options={{ headerShown: false }} />
         <Stack.Screen name="login/registro-asociado" options={{ headerShown: false }} />
         <Stack.Screen name="login/registro" options={{ headerShown: false }} />
